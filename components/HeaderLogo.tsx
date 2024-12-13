@@ -1,5 +1,7 @@
 import React from "react";
 import Image, { StaticImageData } from "next/image";
+// Tân: Anh chưa bao giờ xài cái staticImageData hết ở đâu ra vậy
+
 
 function HeaderLogo({
   logosrc,
@@ -41,6 +43,7 @@ function HeaderLogo({
           <Image src={logosrc} alt={logoalt} height={37} width={84} />
         </div>
 
+        {/* Tân: Em nên có comment tại sao em lại comment out phần này */}
         {/* <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
           A new dasboard
         </span> */}

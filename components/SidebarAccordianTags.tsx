@@ -11,6 +11,7 @@ const AccordianTags = ({ label, childrenTags }: { label: string, childrenTags: s
           <ul className="space-y-2">
             {
               childrenTags.map((tag, index) => (
+                // Xài thêm index làm key ở đây hơi miễn cưỡng và cồng kềnh vì em có tag cũng unique đủ làm key rồi
                 <li key={index}>
                   <ItemTag label={tag} />
                 </li>

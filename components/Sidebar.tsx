@@ -2,6 +2,7 @@ import React from "react";
 import AccordianTags from "./SidebarAccordianTags";
 
 function Sidebar({}) {
+  // Tân: Em bị thiếu kiểu của tags
   const tags = {
     origin: [
       "China",

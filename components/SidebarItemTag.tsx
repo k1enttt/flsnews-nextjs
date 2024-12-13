@@ -1,3 +1,4 @@
+// Tân: Anh nghĩ cái này em nhét vào cái sidebar luôn thì hơn vì chỉ mình nó xài khỏi export lung tung đụng
 const ItemTag = ({ label }: { label: string }) => {
   return (
     <>

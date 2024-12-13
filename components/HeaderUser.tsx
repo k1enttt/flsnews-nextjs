@@ -1,3 +1,5 @@
+// Nên xóa file này luôn
+
 import React from 'react'
 import Image from 'next/image'
 

@@ -2,6 +2,8 @@
 import { Card } from "flowbite-react";
 import { StaticImageData } from "next/image";
 
+
+// Tân: em tạo cái data như vầy rủi ro lắm vì em chưa chốt được hết trường của nó
 const CardNews = ({
   data,
 }: {
@@ -12,6 +14,7 @@ const CardNews = ({
     image: string;
   };
 }) => {
+  // nhưng sau đó em cũng không xài
   const { title, publishedAt, readTime, image } = data;
   return (
     <Card
