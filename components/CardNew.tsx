@@ -1,5 +1,6 @@
 'use client'
 import { Card } from "flowbite-react";
+import { StaticImageData } from "next/image";
 
 const CardNews = ({
   data,
@@ -16,7 +17,7 @@ const CardNews = ({
     <Card
       className="max-w-sm"
       imgAlt="Meaningful alt text for an image that is not purely decorative"
-      imgSrc="https://placehold.co/450x250"
+      imgSrc="https://flowbite-react.com/images/blog/image-1.jpg"
     >
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         Noteworthy technology acquisitions 2021
