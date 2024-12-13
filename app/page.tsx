@@ -1,4 +1,4 @@
-import CardNews from '@/components/CardNew'
+import CardNews from '@/components/CardNews'
 
 export default function Home() {
   return (
