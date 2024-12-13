@@ -15,7 +15,7 @@ const CardNews = ({
   const { title, publishedAt, readTime, image } = data;
   return (
     <Card
-      className="max-w-sm"
+      className="w-full"
       imgAlt="Meaningful alt text for an image that is not purely decorative"
       imgSrc="https://flowbite-react.com/images/blog/image-1.jpg"
     >
