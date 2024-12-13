@@ -3,7 +3,7 @@ import AccordianTags from './SidebarAccordianTags'
 
 function Sidebar({}) {
   const tags = {
-    origin: ['China', 'India', 'Belgium'],
+    origin: ['China', 'India', 'Belgium', 'China', 'India', 'Belgium', 'China', 'India', 'Belgium', 'China', 'India', 'Belgium', 'China', 'India', 'Belgium'],
     destination: ['Usa', 'Vietnam', 'Canada'],
     commodity: ['Surge Bin', 'Structural Steel', 'Renewable Energy System'],
     bussinessUnit: ['Project', 'Logistic', 'Warehousing'],
