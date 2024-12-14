@@ -1,13 +1,13 @@
 const SearchBar = () => {
   return (
-    <div className="flex flex-row gap-1">
+    <div className="flex flex-row gap-1 items-center">
       <input
         type="text"
         placeholder="Find case study"
-        className="w-full p-2 border border-gray-300 rounded-lg focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+        className="w-full p-2 border border-gray-300 focus:border-green focus:outline-none focus:ring-1 focus:ring-green"
       />
       <div className="flex-none">
-        <button className="w-full p-2 bg-primary text-white rounded-lg">
+        <button className="w-full p-2 bg-green text-white">
           Search
         </button>
       </div>

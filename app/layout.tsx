@@ -24,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="">
+      <body className="bg-blue-dark">
         {/* Phần nội dung phía trên header gồm có logo, tên app và lgoin
         Tân tạm để các props của header với sidebar bên trong rồi sau này có gì bưng ra sau
         */}
