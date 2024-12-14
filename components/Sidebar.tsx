@@ -2,7 +2,7 @@ import React from "react";
 import AccordianTags from "./SidebarAccordianTags";
 
 function Sidebar({}) {
-  const tags = {
+  const tags: Record<string, string[]> = {
     origin: [
       "China",
       "India",
@@ -93,7 +93,7 @@ function Sidebar({}) {
       aria-label="Sidebar"
     >
       <div className="h-full px-3 pb-4 overflow-y-auto dark:bg-gray-800">
-        <ul className="space-y-2 font-medium">
+        <ul className="space-y-2 font-medium font-gotham-bold">
           <li>
             <AccordianTags label="Origin" childrenTags={tags.origin} />
           </li>

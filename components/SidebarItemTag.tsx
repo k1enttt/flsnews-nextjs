@@ -1,3 +1,8 @@
+/**
+ * Trả về một tag item để biểu diễn các tag trong sidebar, component này có thể sử dụng thẳng vào AccordionTags thay vì phải tạo một component mới
+ * @param label string
+ * @returns ReactDom
+ */
 const ItemTag = ({ label }: { label: string }) => {
   return (
     <>

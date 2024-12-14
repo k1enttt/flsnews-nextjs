@@ -18,6 +18,8 @@ const AccordianTags = ({
         </Accordion.Title>
         <Accordion.Content className="last:rounded-none">
           <ul className="space-y-2">
+            {/* [Explain] Lý do thẻ <li> không dùng "tag" làm key thay vì "index" là bởi 
+            tag là dữ liệu có thể bị trùng nếu người nhập không kiểm tra kỹ, còn với "index" thì không thể nào bị trùng. */}
             {childrenTags.map((tag, index) => (
               <li key={index}>
                 <ItemTag label={tag} />

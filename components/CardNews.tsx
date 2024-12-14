@@ -12,7 +12,6 @@ const CardNews = ({
     image: string;
   };
 }) => {
-  const { title, publishedAt, readTime, image } = data;
   return (
     <Card
       className="w-full"
