@@ -1,7 +1,7 @@
 const SearchBar = () => {
   return (
     <form action="" method="get">
-      <div className="flex flex-row gap-1 items-center">
+      <div className="flex flex-row gap-1 items-center font-gotham-book">
         <input
           type="text"
           placeholder="Find case study"

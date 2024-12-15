@@ -51,6 +51,9 @@ module.exports = {
         green: "rgb(71, 184, 104)",
         black: "rgba(0, 0, 0, 0.8)",
       },
+      boxShadow: {
+        "outer-white": "0 0 6px 6px rgba(255, 255, 255, 0.4)"
+      }
     },
   },
   plugins: [require("flowbite/plugin")],
