@@ -57,7 +57,7 @@ export default function RootLayout({
         <Header />
 
         {/* Phần các menu item */}
-        <Sidebar />
+        {/* <Sidebar /> */}
         {/* Phần nội dung main của trang */}
         {children}
 
