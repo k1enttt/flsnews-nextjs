@@ -16,10 +16,10 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       fontFamily: {
-        "conthrax-heavy": ["Conthrax-Heavy", "sans-serif"],
-        "conthrax-bold": ["Conthrax-Bold", "sans-serif"],
-        "gotham-bold": ["Gotham-Bold", "sans-serif"],
-        "gotham-book": ["Gotham-Book", "sans-serif"],
+        "conthrax-heavy": ["var(--font-conthrax-heavy)", "sans-serif"],
+        "conthrax-bold": ["var(--font-conthrax-bold)", "sans-serif"],
+        "gotham-bold": ["var(--font-gotham-bold)", "sans-serif"],
+        "gotham-book": ["var(--font-gotham-book)", "sans-serif"],
       },
       fontWeight: {
         heading: "700",

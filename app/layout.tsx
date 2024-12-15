@@ -4,6 +4,32 @@ import Script from "next/script";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import { Metadata } from "next";
+import localFont from "next/font/local";
+
+// Các font cần dùng
+const conthraxBold = localFont({
+  src: "./fonts/conthrax-bold.otf",
+  variable: "--font-conthrax-bold",
+  preload: true,
+});
+
+const conthraxHeavy = localFont({
+  src: "./fonts/conthrax-heavy.otf",
+  variable: "--font-conthrax-heavy",
+  preload: true,
+});
+
+const gothamBook = localFont({
+  src: "./fonts/gotham-book.otf",
+  variable: "--font-gotham-book",
+  preload: true,
+});
+
+const gothamBold = localFont({
+  src: "./fonts/gotham-bold.otf",
+  variable: "--font-gotham-bold",
+  preload: true,
+});
 
 export const metadata: Metadata = {
   title: "FLS Case Studies",
@@ -24,7 +50,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-blue-dark">
+      <body className={`${conthraxHeavy.variable} ${conthraxBold.variable} ${gothamBold.variable} ${gothamBook.variable}  bg-blue-dark`}>
         {/* Phần nội dung phía trên header gồm có logo, tên app và lgoin
         Tân tạm để các props của header với sidebar bên trong rồi sau này có gì bưng ra sau
         */}

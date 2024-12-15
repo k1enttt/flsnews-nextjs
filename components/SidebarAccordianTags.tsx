@@ -13,10 +13,10 @@ const AccordianTags = ({
   return (
     <Accordion className="divide-blue-light rounded-none border-blue-light" collapseAll>
       <Accordion.Panel className="">
-        <Accordion.Title className="focus:ring-0 first:rounded-none bg-transparent hover:bg-green text-white">
+        <Accordion.Title className="focus:ring-0 first:rounded-none bg-transparent hover:bg-green text-white font-gotham-bold">
           {label.toUpperCase()}
         </Accordion.Title>
-        <Accordion.Content className="last:rounded-none">
+        <Accordion.Content className="last:rounded-none font-gotham-book">
           <ul className="space-y-2">
             {/* [Explain] Lý do thẻ <li> không dùng "tag" làm key thay vì "index" là bởi 
             tag là dữ liệu có thể bị trùng nếu người nhập không kiểm tra kỹ, còn với "index" thì không thể nào bị trùng. */}
