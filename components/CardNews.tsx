@@ -1,30 +1,33 @@
-'use client'
+"use client";
 import { Card } from "flowbite-react";
-import { StaticImageData } from "next/image";
+import type { CustomFlowbiteTheme } from "flowbite-react";
 
-const CardNews = ({
-  data,
-}: {
-  data: {
-    title: string;
-    publishedAt: string;
-    readTime: number;
-    image: string;
+const CardNews = () => {
+  const title: string = "Noteworthy technology acquisitions 2021";
+  const description: string =
+    "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.";
+
+  const customCardTheme: CustomFlowbiteTheme["card"] = {
+    img: {
+      base: "group-hover:shadow-outer-white transition duration-200 ease-in-out",
+      horizontal: {
+        off: "rounded-none",
+      },
+    },
   };
-}) => {
-  const { title, publishedAt, readTime, image } = data;
+
   return (
     <Card
-      className="w-full"
+      theme={customCardTheme}
+      className="w-full rounded-none bg-transparent border-none shadow-none hover:cursor-pointer group"
       imgAlt="Meaningful alt text for an image that is not purely decorative"
       imgSrc="https://flowbite-react.com/images/blog/image-1.jpg"
     >
-      <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-        Noteworthy technology acquisitions 2021
+      <h5 className="text-2xl font-bold tracking-tight text-white dark:text-white font-conthrax-bold">
+        {title.toUpperCase()}
       </h5>
-      <p className="font-normal text-gray-700 dark:text-gray-400">
-        Here are the biggest enterprise technology acquisitions of 2021 so far,
-        in reverse chronological order.
+      <p className="font-normal text-white dark:text-gray-400 font-gotham-book">
+        {description}
       </p>
     </Card>
   );

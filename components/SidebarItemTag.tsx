@@ -1,3 +1,8 @@
+/**
+ * Trả về một tag item để biểu diễn các tag trong sidebar, component này có thể sử dụng thẳng vào AccordionTags thay vì phải tạo một component mới
+ * @param label string
+ * @returns ReactDom
+ */
 const ItemTag = ({ label }: { label: string }) => {
   return (
     <>
@@ -6,9 +11,9 @@ const ItemTag = ({ label }: { label: string }) => {
           type="checkbox"
           id={label}
           name={label}
-          className="w-6 h-6 border border-gray-300 rounded mr-2"
+          className="w-6 h-6 border border-gray-300 rounded mr-2 focus:ring-green checked:bg-green"
         />
-        <span className="text-sm font-medium text-gray-700">{label}</span>
+        <span className="text-sm font-medium text-white">{label}</span>
       </label>
     </>
   );

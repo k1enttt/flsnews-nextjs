@@ -9,10 +9,6 @@ const nextConfig = {
         port: '',
         pathname: '/docs/images/people/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'static.wixstatic.com',
-      },
     ],
   },
   experimental: {

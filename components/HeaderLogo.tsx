@@ -1,12 +1,12 @@
 import React from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 
 function HeaderLogo({
   logosrc,
   logoalt,
   logourl,
 }: {
-  logosrc: string | StaticImageData;
+  logosrc: string;
   logoalt: string;
   logourl: string;
 }) {
@@ -41,6 +41,7 @@ function HeaderLogo({
           <Image src={logosrc} alt={logoalt} height={37} width={84} />
         </div>
 
+        {/* [Explain] Lý do comment đoạn code sau là bởi khách hàng chưa cần đến và có thể uncomment nếu khách hàng có nhu cầu */}
         {/* <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
           A new dasboard
         </span> */}
