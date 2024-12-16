@@ -23,7 +23,7 @@ export default function BlogBreadcrumb() {
 
   return (
     <Breadcrumb theme={customBreadcrumbTheme} aria-label="Default breadcrumb example" className="">
-      <Breadcrumb.Item theme={customBreadcrumbItemTheme} href="#" icon={HomeIcon} className="hover:text-white">
+      <Breadcrumb.Item theme={customBreadcrumbItemTheme} href="/" icon={HomeIcon} className="hover:text-white">
         Home
       </Breadcrumb.Item>
       <Breadcrumb.Item theme={customBreadcrumbItemTheme} href="#" className="hover:text-white">Blogs</Breadcrumb.Item>
