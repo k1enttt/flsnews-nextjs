@@ -50,6 +50,7 @@ module.exports = {
         blue: "rgb(4, 104, 177)",
         green: "rgb(71, 184, 104)",
         black: "rgba(0, 0, 0, 0.8)",
+        "gray-light": "rgb(156, 163, 175)"
       },
       boxShadow: {
         "outer-white": "0 0 6px 6px rgba(255, 255, 255, 0.4)"

@@ -1,7 +1,7 @@
 "use client";
 
 import BlogBreadcrumb from "@/components/blog-page/BlogBreadcrumb";
-import { Label, Textarea } from "flowbite-react";
+import { Textarea } from "flowbite-react";
 
 export default function BlogPage() {
   const title: string = "Best practices for successful prototypes";
@@ -9,7 +9,7 @@ export default function BlogPage() {
   return (
     <>
       {/* Thẻ main là bài blog + phần comment */}
-      <main className="pt-8 pb-16 lg:pt-24 lg:pb-24 bg-white antialiased font-gotham-book">
+      <main className="pt-8 pb-16 lg:pt-24 lg:pb-24 text-white antialiased font-gotham-book">
         <div className="flex justify-between px-4 mx-auto max-w-screen-xl">
           <article className="mx-auto w-full max-w-2xl lg:format-lg space-y-4">
             <header className="mb-4 lg:mb-6">
@@ -49,7 +49,7 @@ export default function BlogPage() {
             {/* Comments */}
             <section className="">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg lg:text-2xl font-bold text-gray-900">
+                <h2 className="text-lg lg:text-2xl font-bold">
                   Discussion ({commentCount})
                 </h2>
               </div>
@@ -72,10 +72,10 @@ export default function BlogPage() {
                 </button>
               </form>
               {/* Các bình luận của bài viết */}
-              <article className="p-6 mb-6 text-base bg-white">
+              <article className="p-6 mb-6 text-base text-gray-light">
                 <footer className="flex justify-between items-center mb-2">
                   <div className="flex items-center">
-                    <p className="inline-flex items-center mr-3 font-semibold text-sm text-gray-900 dark:text-white">
+                    <p className="inline-flex items-center mr-3 font-semibold text-sm text-green dark:text-white">
                       <img
                         className="mr-2 w-6 h-6 rounded-full"
                         src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
@@ -83,7 +83,7 @@ export default function BlogPage() {
                       />
                       Bonnie Green
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm dark:text-gray-400">
                       <time dateTime="2022-03-12" title="March 12th, 2022">
                         Mar. 12, 2022
                       </time>
@@ -92,7 +92,7 @@ export default function BlogPage() {
                   <button
                     id="dropdownComment3Button"
                     data-dropdown-toggle="dropdownComment3"
-                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 hover:bg-white/10 focus:ring-4 focus:outline-none focus:ring-white/30 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                     type="button"
                   >
                     <svg
@@ -109,7 +109,7 @@ export default function BlogPage() {
                   {/* <!-- Dropdown menu --> */}
                   <div
                     id="dropdownComment3"
-                    className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                    className="hidden z-10 w-36 bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
                   >
                     <ul
                       className="py-1 text-sm text-gray-700 dark:text-gray-200"
@@ -147,28 +147,11 @@ export default function BlogPage() {
                   stages the UX designer should consider while creating the
                   design strategy.
                 </p>
-                <div className="flex items-center mt-4 space-x-4">
-                  <button
-                    type="button"
-                    className="flex items-center font-medium text-sm text-gray-500 hover:underline dark:text-gray-400"
-                  >
-                    <svg
-                      className="mr-1.5 w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 18"
-                    >
-                      <path d="M18 0H2a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h2v4a1 1 0 0 0 1.707.707L10.414 13H18a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5 4h2a1 1 0 1 1 0 2h-2a1 1 0 1 1 0-2ZM5 4h5a1 1 0 1 1 0 2H5a1 1 0 0 1 0-2Zm2 5H5a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Zm9 0h-6a1 1 0 0 1 0-2h6a1 1 0 1 1 0 2Z" />
-                    </svg>
-                    Reply
-                  </button>
-                </div>
               </article>
-              <article className="p-6 mb-6 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+              <article className="p-6 mb-6 text-base border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900 text-gray-light">
                 <footer className="flex justify-between items-center mb-2">
                   <div className="flex items-center">
-                    <p className="inline-flex items-center mr-3 font-semibold text-sm text-gray-900 dark:text-white">
+                    <p className="inline-flex items-center mr-3 font-semibold text-sm text-green dark:text-white">
                       <img
                         className="mr-2 w-6 h-6 rounded-full"
                         src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
@@ -176,7 +159,7 @@ export default function BlogPage() {
                       />
                       Bonnie Green
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm dark:text-gray-400">
                       <time dateTime="2022-03-12" title="March 12th, 2022">
                         Mar. 12, 2022
                       </time>
@@ -185,7 +168,7 @@ export default function BlogPage() {
                   <button
                     id="dropdownComment3Button"
                     data-dropdown-toggle="dropdownComment3"
-                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 hover:bg-white/10 focus:ring-4 focus:outline-none focus:ring-white/30 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                     type="button"
                   >
                     <svg
@@ -202,7 +185,7 @@ export default function BlogPage() {
                   {/* <!-- Dropdown menu --> */}
                   <div
                     id="dropdownComment3"
-                    className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                    className="hidden z-10 w-36 bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
                   >
                     <ul
                       className="py-1 text-sm text-gray-700 dark:text-gray-200"
@@ -240,29 +223,12 @@ export default function BlogPage() {
                   stages the UX designer should consider while creating the
                   design strategy.
                 </p>
-                <div className="flex items-center mt-4 space-x-4">
-                  <button
-                    type="button"
-                    className="flex items-center font-medium text-sm text-gray-500 hover:underline dark:text-gray-400"
-                  >
-                    <svg
-                      className="mr-1.5 w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 18"
-                    >
-                      <path d="M18 0H2a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h2v4a1 1 0 0 0 1.707.707L10.414 13H18a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5 4h2a1 1 0 1 1 0 2h-2a1 1 0 1 1 0-2ZM5 4h5a1 1 0 1 1 0 2H5a1 1 0 0 1 0-2Zm2 5H5a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Zm9 0h-6a1 1 0 0 1 0-2h6a1 1 0 1 1 0 2Z" />
-                    </svg>
-                    Reply
-                  </button>
-                </div>
               </article>
             </section>
           </article>
         </div>
       </main>
-      <footer className="p-4 bg-white sm:p-6 dark:bg-gray-800">
+      <footer className="p-4 bg-white sm:p-6 dark:bg-gray-800 font-gotham-book">
         <div className="mx-auto max-w-screen-xl">
           <div className="md:flex md:justify-between">
             <div className="mb-6 md:mb-0">

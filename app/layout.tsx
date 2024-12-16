@@ -32,6 +32,7 @@ const gothamBold = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('http://localhost:3000'),
   title: "FLS Case Studies",
   description: "FLS Case Study Library",
   openGraph: {

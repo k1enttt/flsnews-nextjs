@@ -1,6 +1,8 @@
-const HomeIcon = () => (
+import { FC, SVGProps } from "react";
+
+const HomeIcon: FC<SVGProps<SVGSVGElement>> = () => (
   <svg
-    className={`w-4 h-4 mr-2 text-gray-800 dark:text-white`}
+    className={`w-4 h-4 mr-2 text-white dark:text-white`}
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
     width="24"
