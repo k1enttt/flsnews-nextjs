@@ -12,7 +12,7 @@ function Header() {
             <HeaderLogo
               logosrc={"/fls-logo.webp"}
               logoalt={"FLS Group"}
-              logourl={"https://fls-group.com"}
+              logourl={"/"}
             />
           </div>
           <div className="flex-1 flex justify-center">
