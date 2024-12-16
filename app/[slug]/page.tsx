@@ -14,7 +14,7 @@ export default function BlogPage() {
         <div className="flex justify-between px-4 mx-auto max-w-screen-xl">
           <article className="mx-auto w-full max-w-2xl lg:format-lg space-y-4">
             <header className="mb-4 lg:mb-6">
-              {/* Breadcrumb */}
+              {/* Back button */}
               <div className="mb-4">
                 <button
                   type="button"
@@ -62,6 +62,17 @@ export default function BlogPage() {
               buttons, navigation bars, cards, form elements, and more which are
               conveniently built with the utility classes from Tailwind CSS.
             </p>
+            {/* Export to PDF button */}
+            <section>
+              <div className="mt-8">
+                <button
+                  type="button"
+                  className="flex items-center p-2 text-white bg-green hover:underline"
+                >
+                  Export to PDF
+                </button>
+              </div>
+            </section>
           </article>
         </div>
       </main>
