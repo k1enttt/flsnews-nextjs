@@ -1,8 +1,6 @@
 import "./globals.css";
 // Đoạn này để từ từ nhét vào sidebar
 import Script from "next/script";
-import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 

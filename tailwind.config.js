@@ -1,5 +1,3 @@
-const { Flowbite } = require("flowbite-react");
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
