@@ -3,7 +3,7 @@ import "./globals.css";
 import Script from "next/script";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import localFont from "next/font/local";
 
 // Các font cần dùng
