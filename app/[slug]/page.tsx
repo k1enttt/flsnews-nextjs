@@ -1,13 +1,14 @@
 "use client";
 
 import BlogBreadcrumb from "@/components/blog-page/BlogBreadcrumb";
+import BlogLayout from "@/components/blog-page/BlogLayout";
 import { Textarea } from "flowbite-react";
 
 export default function BlogPage() {
   const title: string = "Best practices for successful prototypes";
   const commentCount = 20;
   return (
-    <>
+    <BlogLayout>
       {/* Thẻ main là bài blog + phần comment */}
       <main className="pt-8 pb-16 lg:pt-24 lg:pb-24 text-white antialiased font-gotham-book">
         <div className="flex justify-between px-4 mx-auto max-w-screen-xl">
@@ -401,6 +402,6 @@ export default function BlogPage() {
           </div>
         </div>
       </footer>
-    </>
+    </BlogLayout>
   );
 }

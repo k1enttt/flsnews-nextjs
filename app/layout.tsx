@@ -52,14 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${conthraxHeavy.variable} ${conthraxBold.variable} ${gothamBold.variable} ${gothamBook.variable}  bg-blue-dark`}>
-        {/* Phần nội dung phía trên header gồm có logo, tên app và lgoin
-        Tân tạm để các props của header với sidebar bên trong rồi sau này có gì bưng ra sau
-        */}
-        <Header />
-
-        {/* Phần các menu item */}
-        {/* <Sidebar /> */}
-        {/* Phần nội dung main của trang */}
+        {/* Phần nội dung main + layout của trang home */}
         {children}
 
         {/* Cái script này để nó chạy click menu được */}
