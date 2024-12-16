@@ -1,12 +1,11 @@
 "use client";
 
-import BlogBreadcrumb from "@/components/blog-page/BlogBreadcrumb";
 import BlogLayout from "@/components/blog-page/BlogLayout";
-import { Textarea } from "flowbite-react";
+import { useRouter } from "next/navigation";
 
 export default function BlogPage() {
+  const route = useRouter();
   const title: string = "Best practices for successful prototypes";
-  const commentCount = 20;
   const author = "Admin";
   return (
     <BlogLayout>
@@ -17,7 +16,13 @@ export default function BlogPage() {
             <header className="mb-4 lg:mb-6">
               {/* Breadcrumb */}
               <div className="mb-4">
-                <BlogBreadcrumb />
+                <button
+                  type="button"
+                  className="flex items-center p-2 text-white bg-green hover:underline"
+                  onClick={() => route.back()}
+                >
+                  Back
+                </button>
               </div>
               {/* Tựa bài blog */}
               <h1 className="mb-4 text-3xl font-extrabold leading-tight lg:mb-6 font-conthrax-bold">
@@ -27,7 +32,8 @@ export default function BlogPage() {
                 <i>
                   By <b>{author}</b>
                 </i>{" "}
-                on <time dateTime="2022-03-12" title="March 12th, 2022">
+                on{" "}
+                <time dateTime="2022-03-12" title="March 12th, 2022">
                   Mar. 12, 2022
                 </time>
               </p>
@@ -56,185 +62,6 @@ export default function BlogPage() {
               buttons, navigation bars, cards, form elements, and more which are
               conveniently built with the utility classes from Tailwind CSS.
             </p>
-            {/* Comments */}
-            <section className="">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg lg:text-2xl font-bold">
-                  Discussion ({commentCount})
-                </h2>
-              </div>
-              {/* Chỗ nhập nội dung bình luận */}
-              <form className="mb-6">
-                <div className="w-full mb-4">
-                  <Textarea
-                    id="comment"
-                    placeholder="Leave a comment..."
-                    required
-                    rows={4}
-                    className="rounded-none"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-green focus:ring-4 focus:ring-primary-200 hover:bg-primary-800"
-                >
-                  Post comment
-                </button>
-              </form>
-              {/* Các bình luận của bài viết */}
-              <article className="p-6 mb-6 text-base text-gray-light">
-                <footer className="flex justify-between items-center mb-2">
-                  <div className="flex items-center">
-                    <p className="inline-flex items-center mr-3 font-semibold text-sm text-green dark:text-white">
-                      <img
-                        className="mr-2 w-6 h-6 rounded-full"
-                        src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
-                        alt="Bonnie Green"
-                      />
-                      Bonnie Green
-                    </p>
-                    <p className="text-sm dark:text-gray-400">
-                      <time dateTime="2022-03-12" title="March 12th, 2022">
-                        Mar. 12, 2022
-                      </time>
-                    </p>
-                  </div>
-                  <button
-                    id="dropdownComment3Button"
-                    data-dropdown-toggle="dropdownComment3"
-                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 hover:bg-white/10 focus:ring-4 focus:outline-none focus:ring-white/30 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                    type="button"
-                  >
-                    <svg
-                      className="w-4 h-4"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 16 3"
-                    >
-                      <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
-                    </svg>
-                    <span className="sr-only">Comment settings</span>
-                  </button>
-                  {/* <!-- Dropdown menu --> */}
-                  <div
-                    id="dropdownComment3"
-                    className="hidden z-10 w-36 bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                  >
-                    <ul
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                      aria-labelledby="dropdownMenuIconHorizontalButton"
-                    >
-                      <li>
-                        <a
-                          href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Edit
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Remove
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Report
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </footer>
-                <p>
-                  The article covers the essentials, challenges, myths and
-                  stages the UX designer should consider while creating the
-                  design strategy.
-                </p>
-              </article>
-              <article className="p-6 mb-6 text-base border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900 text-gray-light">
-                <footer className="flex justify-between items-center mb-2">
-                  <div className="flex items-center">
-                    <p className="inline-flex items-center mr-3 font-semibold text-sm text-green dark:text-white">
-                      <img
-                        className="mr-2 w-6 h-6 rounded-full"
-                        src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
-                        alt="Bonnie Green"
-                      />
-                      Bonnie Green
-                    </p>
-                    <p className="text-sm dark:text-gray-400">
-                      <time dateTime="2022-03-12" title="March 12th, 2022">
-                        Mar. 12, 2022
-                      </time>
-                    </p>
-                  </div>
-                  <button
-                    id="dropdownComment3Button"
-                    data-dropdown-toggle="dropdownComment3"
-                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 hover:bg-white/10 focus:ring-4 focus:outline-none focus:ring-white/30 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                    type="button"
-                  >
-                    <svg
-                      className="w-4 h-4"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 16 3"
-                    >
-                      <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
-                    </svg>
-                    <span className="sr-only">Comment settings</span>
-                  </button>
-                  {/* <!-- Dropdown menu --> */}
-                  <div
-                    id="dropdownComment3"
-                    className="hidden z-10 w-36 bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                  >
-                    <ul
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                      aria-labelledby="dropdownMenuIconHorizontalButton"
-                    >
-                      <li>
-                        <a
-                          href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Edit
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Remove
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Report
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </footer>
-                <p>
-                  The article covers the essentials, challenges, myths and
-                  stages the UX designer should consider while creating the
-                  design strategy.
-                </p>
-              </article>
-            </section>
           </article>
         </div>
       </main>
