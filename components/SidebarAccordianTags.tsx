@@ -1,7 +1,23 @@
 "use client";
 import { Accordion } from "flowbite-react";
-import ItemTag from "./SidebarItemTag";
 import { off } from "process";
+
+const ItemTag = ({ label }: { label: string }) => {
+  return (
+    <>
+      <label htmlFor={label} className="flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          id={label}
+          name={label}
+          className="w-6 h-6 border border-gray-300 rounded mr-2 focus:ring-green checked:bg-green"
+        />
+        <span className="text-sm font-medium text-white">{label}</span>
+      </label>
+    </>
+  );
+};
+
 
 const AccordianTags = ({
   label,
@@ -18,10 +34,9 @@ const AccordianTags = ({
         </Accordion.Title>
         <Accordion.Content className="last:rounded-none font-gotham-book">
           <ul className="space-y-2">
-            {/* [Explain] Lý do thẻ <li> không dùng "tag" làm key thay vì "index" là bởi 
-            tag là dữ liệu có thể bị trùng nếu người nhập không kiểm tra kỹ, còn với "index" thì không thể nào bị trùng. */}
-            {childrenTags.map((tag, index) => (
-              <li key={index}>
+            {/* Tag này được tạo và quản lý bởi ghostcms và nó không bị trùng nên mình thoải mái dùng nó để làm key */}
+            {childrenTags.map((tag) => (
+              <li key={tag}>
                 <ItemTag label={tag} />
               </li>
             ))}
