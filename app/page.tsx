@@ -1,7 +1,9 @@
 import CardNews from "@/components/CardNews";
 import HomeLayout from "@/components/HomeLayout";
+import { getAllBlog } from "@/lib/blog";
 
-export default function Home() {
+export default async function Home() {
+  const blogs = await getAllBlog();
   return (
     <HomeLayout>
       {/* chỉ là phần nội dung bên trong thôi, ko có sidebar và header */}
@@ -9,8 +11,12 @@ export default function Home() {
         <div className="w-full mt-16 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 lg:gap-6 gap-4">
           {
             // Tạo ra 20 cái CardNews
-            Array.from({ length: 20 }).map((_, i) => (
-              <CardNews key={i} />
+            blogs.map((blog: any, i: number) => (
+              <CardNews key={i} data={{
+                slug: blog.slug,
+                title: blog.title,
+                html: blog.html
+              }} />
             ))
           }
         </div>
