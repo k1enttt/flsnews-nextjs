@@ -16,6 +16,8 @@ export default async function Home() {
                 slug: blog.slug,
                 title: blog.title,
                 excerpt: blog.excerpt,
+                feature_image: blog.feature_image,
+                feature_image_alt: blog.feature_image_alt,
               }} />
             ))
           }

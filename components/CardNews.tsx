@@ -8,16 +8,18 @@ const CardNews = ({data}:{
     slug: string;
     title: string;
     excerpt: string;
+    feature_image: string;
+    feature_image_alt: string;
   }
 }) => {
   const route = useRouter();
-  const { slug, title, excerpt } = data;
+  const { slug, title, excerpt, feature_image, feature_image_alt } = data;
 
   const customCardTheme: CustomFlowbiteTheme["card"] = {
     img: {
       base: "group-hover:shadow-outer-white transition duration-200 ease-in-out",
       horizontal: {
-        off: "rounded-none",
+        off: "rounded-none h-[220px] aspect-[4/3] object-cover",
       },
     },
   };
@@ -26,8 +28,8 @@ const CardNews = ({data}:{
     <Card
       theme={customCardTheme}
       className="w-full rounded-none bg-transparent border-none shadow-none hover:cursor-pointer group"
-      imgAlt="Meaningful alt text for an image that is not purely decorative"
-      imgSrc="https://flowbite-react.com/images/blog/image-1.jpg"
+      imgAlt={feature_image_alt || ""}
+      imgSrc={feature_image || ""}
       onClick={() => {
         route.push(`/${slug}`);
       }}
