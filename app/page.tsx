@@ -15,7 +15,7 @@ export default async function Home() {
               <CardNews key={i} data={{
                 slug: blog.slug,
                 title: blog.title,
-                html: blog.html
+                excerpt: blog.excerpt,
               }} />
             ))
           }

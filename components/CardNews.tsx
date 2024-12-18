@@ -7,14 +7,11 @@ const CardNews = ({data}:{
   data: {
     slug: string;
     title: string;
-    html: string;
+    excerpt: string;
   }
 }) => {
   const route = useRouter();
-  const { slug, title, html } = data;
-
-  const description: string =
-    "Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.";
+  const { slug, title, excerpt } = data;
 
   const customCardTheme: CustomFlowbiteTheme["card"] = {
     img: {
@@ -38,8 +35,8 @@ const CardNews = ({data}:{
       <h5 className="text-2xl font-bold tracking-tight text-white dark:text-white font-conthrax-bold">
         {title.toUpperCase()}
       </h5>
-      <p className="font-normal text-white dark:text-gray-400 font-gotham-book">
-        {description}
+      <p className="font-normal text-white dark:text-gray-400 font-gotham-book overflow-y-clip max-h-[4.25em]">
+        {excerpt}
       </p>
     </Card>
   );

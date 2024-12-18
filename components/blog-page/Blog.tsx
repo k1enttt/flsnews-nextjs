@@ -1,10 +1,35 @@
-'use client';
+"use client";
+import { formatDate } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
-const Blog = ({title}: {title: string}) => {
+const Blog = ({ blog }: { blog: any }) => {
   const route = useRouter();
-  const author = "Admin";
-  
+  const {
+    title,
+    primary_author,
+    html,
+    published_at,
+  }: {
+    title: string;
+    primary_author: { name: string };
+    html: string;
+    published_at: string;
+  } = blog;
+
+  const {
+    value: dateValue,
+    title: dateTitle,
+    datetime,
+  } = formatDate(published_at);
+
+  // [Explain] Thay đổi link ảnh có trong nội dung post từ localhost sang domain của mình vì thực tế ghostcms đang được host trên local và public bằng cloudflare tunnel
+  const formatedHtml = {
+    __html: html.replaceAll(
+      "http://localhost:8080",
+      "https://ghost.kienttt.site"
+    ),
+  };
+
   return (
     <>
       {/* Thẻ main là bài blog + phần comment */}
@@ -28,38 +53,16 @@ const Blog = ({title}: {title: string}) => {
               </h1>
               <p>
                 <i>
-                  By <b>{author}</b>
+                  By <b>{primary_author.name}</b>
                 </i>{" "}
                 on{" "}
-                <time dateTime="2022-03-12" title="March 12th, 2022">
-                  Mar. 12, 2022
+                <time dateTime={datetime} title={dateTitle}>
+                  {dateValue}
                 </time>
               </p>
             </header>
             {/* Nội dung bài blog */}
-            <img
-              src="https://flowbite.s3.amazonaws.com/typography-plugin/typography-image-2.png"
-              alt=""
-            />
-            <p className="lead">
-              Flowbite is an open-source library of UI components built with the
-              utility-first classes from Tailwind CSS. It also includes
-              interactive elements such as dropdowns, modals, datepickers.
-            </p>
-            <p>
-              Before going digital, you might benefit from scribbling down some
-              ideas in a sketchbook. This way, you can think things through
-              before committing to an actual design project.
-            </p>
-            <p>
-              But then I found a{" "}
-              <a href="https://flowbite.com">
-                component library based on Tailwind CSS called Flowbite
-              </a>
-              . It comes with the most commonly used UI components, such as
-              buttons, navigation bars, cards, form elements, and more which are
-              conveniently built with the utility classes from Tailwind CSS.
-            </p>
+            <div dangerouslySetInnerHTML={formatedHtml}></div>
             {/* Export to PDF button */}
             <section>
               <div className="mt-8">
