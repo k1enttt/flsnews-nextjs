@@ -1,14 +1,15 @@
 import { api } from "./ghost";
+import { BlogPost } from "./types";
 
-export async function getAllBlog() {
+export async function getAllBlog(): Promise<Array<BlogPost>> {
   const response: any = await api.posts.browse({ limit: "all" }).fetch();
   if (!response || !response["data"]) {
     return [];
   }
-  return response["data"] as Array<any>;
+  return response["data"] as Array<BlogPost>;
 }
 
-export async function getBlogBySlug(slug: string) {
+export async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
   const response: any = await api.posts
     .read({
       slug,
@@ -18,5 +19,5 @@ export async function getBlogBySlug(slug: string) {
   if (!response || !response["data"]) {
     return null;
   }
-  return response["data"];
+  return response["data"] as BlogPost;
 }

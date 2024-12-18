@@ -1,19 +1,15 @@
 "use client";
+import { BlogPost } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
-const Blog = ({ blog }: { blog: any }) => {
+const Blog = ({ blog }: { blog: BlogPost }) => {
   const route = useRouter();
   const {
     title,
     primary_author,
     html,
     published_at,
-  }: {
-    title: string;
-    primary_author: { name: string };
-    html: string;
-    published_at: string;
   } = blog;
 
   const {
@@ -23,12 +19,12 @@ const Blog = ({ blog }: { blog: any }) => {
   } = formatDate(published_at);
 
   // [Explain] Thay đổi link ảnh có trong nội dung post từ localhost sang domain của mình vì thực tế ghostcms đang được host trên local và public bằng cloudflare tunnel
-  const formatedHtml = {
+  const formatedHtml = html ? {
     __html: html.replaceAll(
       "http://localhost:8080",
       "https://ghost.kienttt.site"
     ),
-  };
+  } : null;
 
   return (
     <>
@@ -62,7 +58,12 @@ const Blog = ({ blog }: { blog: any }) => {
               </p>
             </header>
             {/* Nội dung bài blog */}
-            <div dangerouslySetInnerHTML={formatedHtml}></div>
+            {
+              formatedHtml && (
+                <div dangerouslySetInnerHTML={formatedHtml}></div>
+              )
+            }
+            
             {/* Export to PDF button */}
             <section>
               <div className="mt-8">

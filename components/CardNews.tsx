@@ -7,9 +7,9 @@ const CardNews = ({data}:{
   data: {
     slug: string;
     title: string;
-    excerpt: string;
-    feature_image: string;
-    feature_image_alt: string;
+    excerpt: string | null;
+    feature_image: string | null;
+    feature_image_alt: string | null;
   }
 }) => {
   const route = useRouter();
