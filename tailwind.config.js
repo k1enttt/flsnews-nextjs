@@ -11,7 +11,8 @@ export const theme = {
   extend: {
     backgroundImage: {
       "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-      "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      "gradient-conic":
+        "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
     },
     fontFamily: {
       "conthrax-heavy": ["var(--font-conthrax-heavy)", "sans-serif"],
@@ -32,7 +33,8 @@ export const theme = {
       lg: "1.125em",
       "2xl": "1.5em",
       "3xl": "1.875em",
-      "4xl": "4em",
+      "4xl": "2.25em",
+      title: "4em",
     },
     backgroundColor: {
       "blue-dark": "rgb(0, 23, 40)",
@@ -48,11 +50,11 @@ export const theme = {
       blue: "rgb(4, 104, 177)",
       green: "rgb(71, 184, 104)",
       black: "rgba(0, 0, 0, 0.8)",
-      "gray-light": "rgb(156, 163, 175)"
+      "gray-light": "rgb(156, 163, 175)",
     },
     boxShadow: {
-      "outer-white": "0 0 6px 6px rgba(255, 255, 255, 0.4)"
-    }
+      "outer-white": "0 0 6px 6px rgba(255, 255, 255, 0.4)",
+    },
   },
 };
 export const plugins = [flowbitePlugin];

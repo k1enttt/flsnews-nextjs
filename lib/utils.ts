@@ -1,7 +1,10 @@
 import { getAllTags } from "./tag";
-import { Tag } from "./types";
+import { MinimalTag } from "./types";
 
-export function formatDate(datetimeString: string) {
+export function formatDate(datetimeString: string | null | undefined) {
+  if (!datetimeString) {
+    return null;
+  }
   return {
     value: formatDateValue(datetimeString),
     title: formatDateTitle(datetimeString),
@@ -12,7 +15,7 @@ export function formatDate(datetimeString: string) {
 export async function getTagTree() {
   const tags = await getAllTags();
 
-  const formatedTags: Array<Record<string, Tag[]>> =
+  const formatedTags: Array<Record<string, MinimalTag[]>> =
     [];
 
   for (const tag of tags) {

@@ -1,7 +1,7 @@
 import Blog from "@/components/blog-page/Blog";
 import BlogLayout from "@/components/blog-page/BlogLayout";
 import { getBlogBySlug } from "@/lib/blog";
-import { BlogPost } from "@/lib/types";
+import { Post } from "@ts-ghost/content-api";
 import { notFound } from "next/navigation";
 
 export default async function BlogPage({
@@ -12,7 +12,7 @@ export default async function BlogPage({
   };
 }) {
   const { slug } = params;
-  const blog: BlogPost | null = await getBlogBySlug(slug.toString());
+  const blog: Post | null = await getBlogBySlug(slug.toString());
   if (!blog) {
     return notFound();
   }

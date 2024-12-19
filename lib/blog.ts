@@ -1,15 +1,15 @@
+import { Post } from "@ts-ghost/content-api";
 import { contentApi as api } from "./ghost";
-import { BlogPost } from "./types";
 
-export async function getAllBlog(): Promise<Array<BlogPost>> {
+export async function getAllBlog(): Promise<Array<Post>> {
   const response: any = await api.posts.browse({ limit: "all" }).fetch();
   if (!response.success || !response["data"]) {
     return [];
   }
-  return response["data"] as Array<BlogPost>;
+  return response["data"] as Array<Post>;
 }
 
-export async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
+export async function getBlogBySlug(slug: string): Promise<Post | null> {
   const response: any = await api.posts
     .read({
       slug,
@@ -19,5 +19,5 @@ export async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
   if (!response.success || !response["data"]) {
     return null;
   }
-  return response["data"] as BlogPost;
+  return response["data"] as Post;
 }

@@ -1,9 +1,9 @@
 "use client";
-import { BlogPost } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
+import { Post } from "@ts-ghost/content-api";
 import { useRouter } from "next/navigation";
 
-const Blog = ({ blog }: { blog: BlogPost }) => {
+const Blog = ({ blog }: { blog: Post }) => {
   const route = useRouter();
   const { title, primary_author, html, published_at } = blog;
 
@@ -11,7 +11,7 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
     value: dateValue,
     title: dateTitle,
     datetime,
-  } = formatDate(published_at);
+  } = formatDate(published_at) || {};
 
   // [Explain] Thay đổi link ảnh có trong nội dung post từ localhost sang domain của mình vì thực tế ghostcms đang được host trên local và public bằng cloudflare tunnel
   const formatedHtml = html
@@ -19,7 +19,7 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
         __html: html.replaceAll(
           "http://localhost:8080",
           "https://ghost.kienttt.site"
-        ),
+        ) as TrustedHTML,
       }
     : null;
 
@@ -46,7 +46,7 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
               </h1>
               <p>
                 <i>
-                  By <b>{primary_author.name}</b>
+                  By <b>{primary_author ? primary_author.name : "Anonymous"}</b>
                 </i>{" "}
                 on{" "}
                 <time dateTime={datetime} title={dateTitle}>
@@ -55,6 +55,8 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
               </p>
             </header>
             {/* Nội dung bài blog */}
+            {/* [Explain] Để áp dụng style cho các thẻ html trong nội dung bài viết thì cần khai báo style ở global.css, nhưng nếu làm vậy các style ở tất cả các trang khác sẽ bị ảnh hưởng. 
+            Vì thế chưa có cách nào khác để áp dụng style cho nội dung bài viết*/}
             {formatedHtml && <div dangerouslySetInnerHTML={formatedHtml}></div>}
 
             {/* Export to PDF button */}

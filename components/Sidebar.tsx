@@ -1,9 +1,8 @@
 import React from "react";
-import { getTagTree } from "@/lib/utils";
 import AccordianTags from "./SidebarAccordianTags";
+import { MinimalTag } from "@/lib/types";
 
-async function Sidebar() {
-  const tags = await getTagTree();
+function Sidebar({ tags }: { tags: Record<string, MinimalTag[]>[] }) {
   return (
     <aside
       id="logo-sidebar"

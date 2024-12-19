@@ -1,5 +1,5 @@
 "use client";
-import { Tag } from "@/lib/types";
+import { MinimalTag } from "@/lib/types";
 import { Accordion } from "flowbite-react";
 
 const ItemTag = ({ label }: { label: string }) => {
@@ -24,7 +24,7 @@ const AccordianTags = ({
   childrenTags,
 }: {
   label: string;
-  childrenTags: Tag[];
+  childrenTags: MinimalTag[];
 }) => {
   return (
     <Accordion className="divide-blue-light rounded-none border-blue-light" collapseAll>
