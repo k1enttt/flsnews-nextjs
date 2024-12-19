@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.footer-link {
+    @apply hover:underline hover:text-blue;
+}

@@ -37,6 +37,8 @@ const CardNews = ({data}:{
       <h5 className="text-2xl font-bold tracking-tight text-white dark:text-white font-conthrax-bold">
         {title.toUpperCase()}
       </h5>
+      {/* Việc giới hạn trích dẫn (excerpt) ngoài cách sửa style của containter (thẻ <p>) để xén bớt nội dung của excerpt thì Ghost có hỗ trợ giới hạn ký tự của excerpt,
+       theo hướng dẫn của link https://ghost.org/docs/themes/helpers/excerpt/#description */}
       <p className="font-normal text-white dark:text-gray-400 font-gotham-book overflow-y-clip max-h-[4.25em]">
         {excerpt}
       </p>

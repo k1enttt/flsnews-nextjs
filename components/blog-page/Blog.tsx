@@ -5,12 +5,7 @@ import { useRouter } from "next/navigation";
 
 const Blog = ({ blog }: { blog: BlogPost }) => {
   const route = useRouter();
-  const {
-    title,
-    primary_author,
-    html,
-    published_at,
-  } = blog;
+  const { title, primary_author, html, published_at } = blog;
 
   const {
     value: dateValue,
@@ -19,12 +14,14 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
   } = formatDate(published_at);
 
   // [Explain] Thay đổi link ảnh có trong nội dung post từ localhost sang domain của mình vì thực tế ghostcms đang được host trên local và public bằng cloudflare tunnel
-  const formatedHtml = html ? {
-    __html: html.replaceAll(
-      "http://localhost:8080",
-      "https://ghost.kienttt.site"
-    ),
-  } : null;
+  const formatedHtml = html
+    ? {
+        __html: html.replaceAll(
+          "http://localhost:8080",
+          "https://ghost.kienttt.site"
+        ),
+      }
+    : null;
 
   return (
     <>
@@ -58,12 +55,8 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
               </p>
             </header>
             {/* Nội dung bài blog */}
-            {
-              formatedHtml && (
-                <div dangerouslySetInnerHTML={formatedHtml}></div>
-              )
-            }
-            
+            {formatedHtml && <div dangerouslySetInnerHTML={formatedHtml}></div>}
+
             {/* Export to PDF button */}
             <section>
               <div className="mt-8">
@@ -82,6 +75,7 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
       <footer className="p-4 bg-white sm:p-6 dark:bg-gray-800 font-gotham-book">
         <div className="mx-auto max-w-screen-xl">
           <div className="md:flex md:justify-between">
+            {/* Logo của công ty */}
             <div className="mb-6 md:mb-0">
               <a href="https://fls-group.com" className="flex items-center">
                 <img
@@ -92,20 +86,21 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
               </a>
             </div>
             <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+              {/* Tài nguyên của công ty */}
               <div>
                 <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
                   Resources
                 </h2>
                 <ul className="text-gray-600 dark:text-gray-400">
                   <li className="mb-4">
-                    <a href="https://fls-group.com" className="hover:underline">
+                    <a href="https://fls-group.com" className="footer-link">
                       FLS Group
                     </a>
                   </li>
                   <li className="mb-4">
                     <a
                       href="https://fls-group.com/who-we-are"
-                      className="hover:underline"
+                      className="footer-link"
                     >
                       Who we are
                     </a>
@@ -113,13 +108,14 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
                   <li>
                     <a
                       href="https://fls-group.com/capabilities"
-                      className="hover:underline"
+                      className="footer-link"
                     >
                       Capabilities
                     </a>
                   </li>
                 </ul>
               </div>
+              {/* Thông tin liên hệ */}
               <div>
                 <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
                   Follow us
@@ -128,7 +124,7 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
                   <li className="mb-4">
                     <a
                       href="https://www.linkedin.com/company/flsgroup/"
-                      className="hover:underline "
+                      className="footer-link "
                     >
                       LinkedIn
                     </a>
@@ -136,7 +132,7 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
                   <li className="mb-4">
                     <a
                       href="https://www.facebook.com/FLSGroup1993"
-                      className="hover:underline"
+                      className="footer-link"
                     >
                       Facebook
                     </a>
@@ -144,13 +140,14 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
                   <li>
                     <a
                       href="https://www.youtube.com/c/FLSGroup"
-                      className="hover:underline"
+                      className="footer-link"
                     >
                       Youtube
                     </a>
                   </li>
                 </ul>
               </div>
+              {/* Chính sách */}
               <div>
                 <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
                   Legal
@@ -159,7 +156,7 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
                   <li className="mb-4">
                     <a
                       href="https://fls-group.com/privacy-policy"
-                      className="hover:underline"
+                      className="footer-link"
                     >
                       Privacy Policy
                     </a>
@@ -167,7 +164,7 @@ const Blog = ({ blog }: { blog: BlogPost }) => {
                   <li>
                     <a
                       href="https://fls-group.com/terms-conditions"
-                      className="hover:underline"
+                      className="footer-link"
                     >
                       Terms &amp; Conditions
                     </a>
