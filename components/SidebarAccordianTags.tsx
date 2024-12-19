@@ -1,4 +1,5 @@
 "use client";
+import { Tag } from "@/lib/types";
 import { Accordion } from "flowbite-react";
 
 const ItemTag = ({ label }: { label: string }) => {
@@ -23,7 +24,7 @@ const AccordianTags = ({
   childrenTags,
 }: {
   label: string;
-  childrenTags: string[];
+  childrenTags: Tag[];
 }) => {
   return (
     <Accordion className="divide-blue-light rounded-none border-blue-light" collapseAll>
@@ -35,8 +36,8 @@ const AccordianTags = ({
           <ul className="space-y-2">
             {/* Tag này được tạo và quản lý bởi ghostcms và nó không bị trùng nên mình thoải mái dùng nó để làm key */}
             {childrenTags.map((tag) => (
-              <li key={tag}>
-                <ItemTag label={tag} />
+              <li key={tag.slug}>
+                <ItemTag label={tag.name} />
               </li>
             ))}
           </ul>

@@ -2,7 +2,7 @@ import { TSGhostAdminAPI } from "@ts-ghost/admin-api";
 import dotenv from "dotenv";
 
 dotenv.config();
-export const adminApi = new TSGhostAdminAPI(
+const adminApi = new TSGhostAdminAPI(
   process.env.GHOST_URL || "",
   process.env.GHOST_ADMIN_API_KEY || "",
   "v5.104.2"

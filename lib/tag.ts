@@ -1,10 +1,13 @@
-import { contentApi as api } from "./ghost";
+import { adminApi as api } from "./ghost";
 
 export async function getAllTags() {
   const response: any = await api.tags.browse({ limit: "all" }).fetch();
-  console.log(response);
-  if (!response || !response["data"]) {
+
+  if (!response.success || !response["data"]) {
     return [];
   }
-  return response["data"];
+  const tags = (response["data"] as Array<any>).map((tag) => {
+    return { slug: tag.slug, name: tag.name };
+  });
+  return tags;
 }

@@ -50,3 +50,5 @@ export interface BlogPost {
     twitter: string | null;
     url: string;
   }
+
+  export interface Tag { slug: string; name: string };

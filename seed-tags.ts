@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { tags } from "./sample-data.js";
 
 dotenv.config();
-export const adminApi = new TSGhostAdminAPI(
+const adminApi = new TSGhostAdminAPI(
   process.env.GHOST_URL || "",
   process.env.GHOST_ADMIN_API_KEY || "",
   "v5.104.2"

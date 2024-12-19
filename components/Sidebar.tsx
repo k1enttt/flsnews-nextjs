@@ -1,8 +1,9 @@
 import React from "react";
+import { getTagTree } from "@/lib/utils";
 import AccordianTags from "./SidebarAccordianTags";
-import { tags } from "@/lib/constant";
 
-function Sidebar({}) {
+async function Sidebar() {
+  const tags = await getTagTree();
   return (
     <aside
       id="logo-sidebar"
@@ -11,24 +12,14 @@ function Sidebar({}) {
     >
       <div className="h-full px-3 overflow-y-auto dark:bg-gray-800 md:pb-4 pb-16">
         <ul className="space-y-2 font-medium">
-          <li>
-            <AccordianTags label="Origin" childrenTags={tags.origin} />
-          </li>
-          <li>
-            <AccordianTags
-              label="Destination"
-              childrenTags={tags.destination}
-            />
-          </li>
-          <li>
-            <AccordianTags label="Commodity" childrenTags={tags.commodity} />
-          </li>
-          <li>
-            <AccordianTags
-              label="Bussiness Unit"
-              childrenTags={tags.bussinessUnit}
-            />
-          </li>
+          {tags.map((tag) => (
+            <li key={Object.keys(tag)[0]}>
+              <AccordianTags
+                label={Object.keys(tag)[0]}
+                childrenTags={Object.values(tag)[0]}
+              />
+            </li>
+          ))}
         </ul>
       </div>
     </aside>
