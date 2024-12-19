@@ -19,6 +19,7 @@ GHOST_ADMIN_API_KEY="675fe2af05535a0001353bfa:609851f2fb1a3d22bd3662db439aba4dea
 Third, seed some sample data:
 ```bash
 node --experimental-strip-types seed-tags.ts
+node --experimental-strip-types seed-posts.ts
 ```
 
 Finally, run the development server:

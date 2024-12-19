@@ -10,7 +10,6 @@ const adminApi = new TSGhostAdminAPI(
 
 async function getAllTags(): Promise<string[]> {
   const response: any = await adminApi.tags.browse({ limit: "all" }).fetch();
-  console.log(JSON.stringify(response["data"]));
 
   if (!response.success || !response["data"]) {
     return [];
@@ -63,24 +62,23 @@ async function postPost(post: Post) {
 async function main() {
   // Get tất cả tag có sẵn trong ghost
   const tags = await getAllTags();
-  tags;
 
   // Tạo ra 10 bài viết ngẫu nhiên với các tag ngẫu nhiên
-//   const posts = generatePosts(5, tags);
+  const posts = generatePosts(10, tags);
 
-//   // Post bài viết lên ghost
-//   const promises = [];
-//   for (const post of posts) {
-//     promises.push(
-//       postPost(post).then((response) => {
-//         if (response) {
-//           console.info(`Post ${post.title} is created`);
-//         } else {
-//           console.error(`Post ${post.title} is NOT created`);
-//         }
-//       })
-//     );
-//   }
-//   await Promise.all(promises);
+  // Post bài viết lên ghost
+  const promises = [];
+  for (const post of posts) {
+    promises.push(
+      postPost(post).then((response) => {
+        if (response) {
+          console.info(`Post ${post.title} is created`);
+        } else {
+          console.error(`Post ${post.title} is NOT created`);
+        }
+      })
+    );
+  }
+  await Promise.all(promises);
 }
 main();
