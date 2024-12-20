@@ -1,15 +1,15 @@
 "use client";
 
-import { Pagination } from "flowbite-react";
+import { CustomFlowbiteTheme, Pagination } from "flowbite-react";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export function PostPagination({ totalPages }: { totalPages: number }) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const page = parseInt(searchParams.get("page") || "1");
-  const [currentPage, setCurrentPage] = useState(page);
-  
+  const page: number = parseInt(searchParams.get("page") || "1");
+  const [currentPage, setCurrentPage] = useState<number>(page);
+
   if (page < 1 || page > totalPages) {
     return notFound();
   }
@@ -19,9 +19,25 @@ export function PostPagination({ totalPages }: { totalPages: number }) {
     router.push(`/?page=${page}`);
   };
 
+  const customPaginationTheme: CustomFlowbiteTheme["pagination"] = {
+    pages: {
+        previous: {
+            base:"ml-0 border border-white px-3 py-2 leading-tight text-white enabled:hover:underline"
+        },
+        next: {
+            base:"border border-white px-3 py-2 leading-tight text-white enabled:hover:underline"
+        },
+        selector: {
+            base: "w-12 border border-white py-2 leading-tight text-white enabled:hover:underline",
+            active: "bg-white text-green hover:bg-white hover:text-green hover:underline",
+        }
+    }
+  }
+
   return (
-    <div className="flex overflow-x-auto sm:justify-center">
+    <div className="flex overflow-x-auto sm:justify-center font-gotham-book">
       <Pagination
+        theme={customPaginationTheme}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={onPageChange}
