@@ -63,8 +63,8 @@ async function main() {
   // Get tất cả tag có sẵn trong ghost
   const tags = await getAllTags();
 
-  // Tạo ra 10 bài viết ngẫu nhiên với các tag ngẫu nhiên
-  const posts = generatePosts(10, tags);
+  // Tạo ra 24 bài viết ngẫu nhiên với các tag ngẫu nhiên
+  const posts = generatePosts(24, tags);
 
   // Post bài viết lên ghost
   const promises = [];

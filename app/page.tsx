@@ -12,7 +12,6 @@ export default async function Home() {
       <main className="p-4 sm:ml-64">
         <div className="w-full mt-16 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 lg:gap-6 gap-4">
           {
-            // Tạo ra 20 cái CardNews
             blogs.map((blog: Post, i: number) => (
               <CardNews
                 key={i}
