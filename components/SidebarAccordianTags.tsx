@@ -3,7 +3,7 @@ import { MinimalTag } from "@/lib/types";
 import { Accordion } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const ItemTag = ({ label }: { label: string }) => {
+const ItemTag = ({ label, slug }: { label: string, slug: string }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedTags = searchParams.get("tags")?.split(",") || [];
@@ -12,13 +12,13 @@ const ItemTag = ({ label }: { label: string }) => {
   const onTagChange = (value: boolean) => {
     const params = new URLSearchParams(searchParams);
     if (value) {
-      selectedTags.push(label);
+      selectedTags.push(slug);
       params.set("tags", selectedTags.join(","));
     } else {
       if (selectedTags.length === 1) {
         params.delete("tags");
       } else {
-        const index = selectedTags.indexOf(label);
+        const index = selectedTags.indexOf(slug);
         if (index > -1) {
           selectedTags.splice(index, 1);
         }
@@ -29,7 +29,7 @@ const ItemTag = ({ label }: { label: string }) => {
   }
   
   // Load tags from URL
-  const isSelected = selectedTags.includes(label);
+  const isSelected = selectedTags.includes(slug);
 
   return (
     <>
@@ -67,7 +67,7 @@ const AccordianTags = ({
             {/* Tag này được tạo và quản lý bởi ghostcms và nó không bị trùng nên mình thoải mái dùng nó để làm key */}
             {childrenTags.map((tag) => (
               <li key={tag.slug}>
-                <ItemTag label={tag.name} />
+                <ItemTag label={tag.name} slug={tag.slug} />
               </li>
             ))}
           </ul>
