@@ -13,7 +13,8 @@ export default async function Home({
     query: string;
   };
 }) {
-  const pageIndex = parseInt(searchParams.page || "1");
+  const validatePage = parseInt(searchParams.page || "1");
+  const pageIndex = validatePage >= 1 ? validatePage : 1;
 
   const [postPerPage, tags] = await Promise.all([
     getPostPerPage(searchParams.query, pageIndex),

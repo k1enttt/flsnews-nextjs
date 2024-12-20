@@ -19,7 +19,6 @@ export async function getPostPerPage(
         .browse({ limit: limit, page: page, filter: `title:~'${query.trim()}'` })
         .fetch()
     : await api.posts.browse({ limit: limit, page: page }).fetch();
-  console.log(response);
   if (!response.success || !response["data"]) {
     return { posts: [], pages: 0 };
   }

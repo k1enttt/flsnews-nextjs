@@ -1,7 +1,7 @@
 "use client";
 
 import { CustomFlowbiteTheme, Pagination } from "flowbite-react";
-import { notFound, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export function PostPagination({ totalPages }: { totalPages: number }) {
@@ -10,13 +10,11 @@ export function PostPagination({ totalPages }: { totalPages: number }) {
   const page: number = parseInt(searchParams.get("page") || "1");
   const [currentPage, setCurrentPage] = useState<number>(page);
 
-  if (page < 1 || page > totalPages) {
-    return notFound();
-  }
-
   const onPageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams);
     setCurrentPage(page);
-    router.push(`/?page=${page}`);
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`);
   };
 
   const customPaginationTheme: CustomFlowbiteTheme["pagination"] = {
