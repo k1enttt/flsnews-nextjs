@@ -14,7 +14,7 @@ export async function getPostPerPage(
   page: number = 1,
   limit: number = 12
 ): Promise<{ posts: Array<Post>; pages: number }> {
-  const response = query
+  const response = query && query.trim() != ""
     ? await api.posts
         .browse({ limit: limit, page: page, filter: `title:~'${query.trim()}'` })
         .fetch()

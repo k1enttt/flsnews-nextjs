@@ -7,8 +7,7 @@ import { useState } from "react";
 export function PostPagination({ totalPages }: { totalPages: number }) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const page: number = parseInt(searchParams.get("page") || "1");
-  const [currentPage, setCurrentPage] = useState<number>(page);
+  const [currentPage, setCurrentPage] = useState<number>(parseInt(searchParams.get("page") || "1"));
 
   const onPageChange = (page: number) => {
     const params = new URLSearchParams(searchParams);
