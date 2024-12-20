@@ -1,14 +1,18 @@
 "use client";
 
 import { Pagination } from "flowbite-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-export function PostPagination() {
+export function PostPagination({ totalPages }: { totalPages: number }) {
   const searchParams = useSearchParams();
-  const page = parseInt(searchParams.get("page") || "1");
   const router = useRouter();
+  const page = parseInt(searchParams.get("page") || "1");
   const [currentPage, setCurrentPage] = useState(page);
+  
+  if (page < 1 || page > totalPages) {
+    return notFound();
+  }
 
   const onPageChange = (page: number) => {
     setCurrentPage(page);
@@ -19,7 +23,7 @@ export function PostPagination() {
     <div className="flex overflow-x-auto sm:justify-center">
       <Pagination
         currentPage={currentPage}
-        totalPages={100}
+        totalPages={totalPages}
         onPageChange={onPageChange}
       />
     </div>
