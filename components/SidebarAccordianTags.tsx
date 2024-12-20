@@ -1,8 +1,36 @@
 "use client";
 import { MinimalTag } from "@/lib/types";
 import { Accordion } from "flowbite-react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const ItemTag = ({ label }: { label: string }) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const selectedTags = searchParams.get("tags")?.split(",") || [];
+
+  // Set tags to URL
+  const onTagChange = (value: boolean) => {
+    const params = new URLSearchParams(searchParams);
+    if (value) {
+      selectedTags.push(label);
+      params.set("tags", selectedTags.join(","));
+    } else {
+      if (selectedTags.length === 1) {
+        params.delete("tags");
+      } else {
+        const index = selectedTags.indexOf(label);
+        if (index > -1) {
+          selectedTags.splice(index, 1);
+        }
+        params.set("tags", selectedTags.join(","));
+      }
+    }
+    router.replace(`?${params.toString()}`);
+  }
+  
+  // Load tags from URL
+  const isSelected = selectedTags.includes(label);
+
   return (
     <>
       <label htmlFor={label} className="flex items-center cursor-pointer">
@@ -10,6 +38,8 @@ const ItemTag = ({ label }: { label: string }) => {
           type="checkbox"
           id={label}
           name={label}
+          defaultChecked={isSelected}
+          onChange={(e) => onTagChange(e.target.checked)}
           className="w-6 h-6 border border-gray-300 rounded mr-2 focus:ring-green checked:bg-green"
         />
         <span className="text-sm font-medium text-white">{label}</span>
