@@ -10,6 +10,7 @@ export async function getAllBlog(): Promise<Array<Post>> {
 }
 
 export async function getPostPerPage(
+  query: string,
   page: number,
   limit: number = 12
 ): Promise<{ posts: Array<Post>; pages: number }> {
