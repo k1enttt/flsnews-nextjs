@@ -8,7 +8,12 @@ const SearchBar = () => {
 
   const onQueryChange = (term: string) => {
     const newSearchParams = new URLSearchParams(searchParams);
+
+    // Reset other search params when searching
     newSearchParams.set("page", "1");
+    newSearchParams.delete("tags");
+
+    // Set query to URL
     if (term) {
       newSearchParams.set("query", term);
     } else {
