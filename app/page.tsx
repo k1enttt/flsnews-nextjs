@@ -10,11 +10,13 @@ export default async function Home({
 }: {
   searchParams: {
     page: string;
+    query: string;
   };
 }) {
   const pageIndex = parseInt(searchParams.page || "1");
+
   const [postPerPage, tags] = await Promise.all([
-    getPostPerPage(pageIndex),
+    getPostPerPage(searchParams.query, pageIndex),
     getTagTree(),
   ]);
   return (

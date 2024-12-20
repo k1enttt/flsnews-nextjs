@@ -11,14 +11,17 @@ export async function getAllBlog(): Promise<Array<Post>> {
 
 export async function getPostPerPage(
   query: string,
-  page: number,
+  page: number = 1,
   limit: number = 12
 ): Promise<{ posts: Array<Post>; pages: number }> {
-  const response: any = await api.posts
-    .browse({ limit: limit, page: page })
-    .fetch();
+  const response = query
+    ? await api.posts
+        .browse({ limit: limit, page: page, filter: `title:~'${query.trim()}'` })
+        .fetch()
+    : await api.posts.browse({ limit: limit, page: page }).fetch();
+  console.log(response);
   if (!response.success || !response["data"]) {
-    return {posts: [], pages: 0};
+    return { posts: [], pages: 0 };
   }
   const posts = response["data"] as Array<Post>;
   const pages = response["meta"].pagination.pages;
