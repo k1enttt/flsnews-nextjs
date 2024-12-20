@@ -11,13 +11,15 @@ export default async function Home({
   searchParams: {
     page: string;
     query: string;
+    tags: string;
   };
 }) {
-  const validatePage = parseInt(searchParams.page || "1");
-  const pageIndex = validatePage >= 1 ? validatePage : 1;
+  const validatePage: number = parseInt(searchParams.page || "1");
+  const pageIndex: number = validatePage >= 1 ? validatePage : 1;
+  const selectedTags: string = searchParams.tags || "";
 
   const [postPerPage, tags] = await Promise.all([
-    getPostPerPage(searchParams.query, pageIndex),
+    getPostPerPage({ query: searchParams.query, page: pageIndex, tags: selectedTags }),
     getTagTree(),
   ]);
   return (

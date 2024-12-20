@@ -9,16 +9,37 @@ export async function getAllBlog(): Promise<Array<Post>> {
   return response["data"] as Array<Post>;
 }
 
-export async function getPostPerPage(
-  query: string,
-  page: number = 1,
-  limit: number = 12
-): Promise<{ posts: Array<Post>; pages: number }> {
-  const response = query && query.trim() != ""
-    ? await api.posts
-        .browse({ limit: limit, page: page, filter: `title:~'${query.trim()}'` })
-        .fetch()
-    : await api.posts.browse({ limit: limit, page: page }).fetch();
+export async function getPostPerPage({
+  query = "",
+  tags = "",
+  page = 1,
+  limit = 12,
+}: {
+  query?: string;
+  tags?: string;
+  page?: number;
+  limit?: number;
+}): Promise<{ posts: Array<Post>; pages: number }> {
+  const response =
+    // Nếu có query thì tìm kiếm theo query, nếu không thì tìm kiếm theo tags
+    query && query.trim() != ""
+      ? await api.posts
+          .browse({
+            limit: limit,
+            page: page,
+            filter: `title:~'${query.trim()}'`,
+          })
+          .fetch()
+      : // Nếu có tags thì tìm kiếm theo tags, nếu không thì tìm kiếm tất cả
+      tags != ""
+      ? await api.posts
+          .browse({
+            limit: limit,
+            page: page,
+            filter: `tags:[${tags}]`,
+          })
+          .fetch()
+      : await api.posts.browse({ limit: limit, page: page }).fetch();
   if (!response.success || !response["data"]) {
     return { posts: [], pages: 0 };
   }
