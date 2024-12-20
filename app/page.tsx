@@ -1,11 +1,19 @@
 import CardNews from "@/components/CardNews";
 import HomeLayout from "@/components/HomeLayout";
-import { getAllBlog } from "@/lib/blog";
+import { PostPagination } from "@/components/Pagination";
+import { getPostPerPage } from "@/lib/blog";
 import { getTagTree } from "@/lib/utils";
 import { Post } from "@ts-ghost/content-api";
 
-export default async function Home() {
-  const [blogs, tags] = await Promise.all([getAllBlog(), getTagTree()]);
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: {
+    page: string;
+  };
+}) {
+  const pageIndex = parseInt(searchParams.page || "1");
+  const [blogs, tags] = await Promise.all([getPostPerPage(pageIndex), getTagTree()]);
   return (
     <HomeLayout tags={tags}>
       {/* chỉ là phần nội dung bên trong thôi, ko có sidebar và header */}
@@ -26,6 +34,7 @@ export default async function Home() {
             ))
           }
         </div>
+        <PostPagination />
       </main>
     </HomeLayout>
   );
