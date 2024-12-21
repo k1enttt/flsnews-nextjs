@@ -1,11 +1,12 @@
 "use client";
-import { formatDate } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
+import {
+  formatDate,
+} from "@/lib/utils";
+import { useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
 
 const Blog = ({ blog }: { blog: Post }) => {
   const route = useRouter();
-  const pathname = usePathname();
 
   const { title, slug, primary_author, html, published_at } = blog;
 
@@ -18,26 +19,30 @@ const Blog = ({ blog }: { blog: Post }) => {
   // [Explain] Thay đổi link ảnh có trong nội dung post từ localhost sang domain của mình vì thực tế ghostcms đang được host trên local và public bằng cloudflare tunnel
   const formatedHtml = html
     ? {
-        __html: html.replaceAll(
-          "http://localhost:8080",
-          "https://ghost.kienttt.site"
-        ) as TrustedHTML,
+        __html: `<div class="space-y-6">${
+          html
+            .replaceAll("http://localhost:8080", "https://ghost.kienttt.site")
+            .replaceAll("<strong>", '<strong class="font-bold">') as TrustedHTML
+        }</div>`,
       }
     : null;
 
   const exportToPdf = async () => {
     const html2pdf = await require("html2pdf.js");
-    const article = document.querySelector("#blog");
+    const article = document.querySelector("#blog")
+    const options = {
+      margin: 15,
+      filename: `${slug}.pdf`,
+      jsPDF: {
+        format: "a4",
+        orientation: "portrait",
+      },
+      // [Explain] "useCORS: true" dùng để tránh lỗi mất hình ảnh khi xuất pdf
+      html2canvas: { useCORS: true },
+    };
 
     if (article) {
-      html2pdf(article, {
-        margin: [15, 5],
-        filename: `${slug}.pdf`,
-        jsPDF: {
-          format: "a4",
-          orientation: "portrait",
-        },
-      });
+      html2pdf().from(article).set(options).save();
     }
   };
 
