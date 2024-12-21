@@ -4,25 +4,27 @@ A news website was built by NextJS and GhostCMS
 
 ## Getting Started
 
-First, install the dependencies:
+### First, install the dependencies:
 ```bash
 npm i
 ```
 
-Second, define your GhostCMS url and content api key in `.env`:
-```json
-GHOST_URL="https://yourghostdomain.com"
-GHOST_CONTENT_API_KEY="ef085b6e92f6bb0e5436b15c54" // Sample content api key
-GHOST_ADMIN_API_KEY="675fe2af05535a0001353bfa:609851f2fb1a3d22bd3662db439aba4dea2914c0b0b4d1234ae5f36464175fbe" // Sample admin api key
+### Second, create a copy of the `.env.example` file and save it as `.env`:
+```bash
+copy .env.example .env # Window
+
+cp .env.example .env # Ubuntu
 ```
 
-Third, seed some sample data:
+Then, customize the `.env` file according to your GhostCMS server configuration.
+
+### Third, seed some sample data:
 ```bash
 node --experimental-strip-types seed-tags.ts
 node --experimental-strip-types seed-posts.ts
 ```
 
-Finally, run the development server:
+### Finally, run the development server:
 
 ```bash
 npm run dev
