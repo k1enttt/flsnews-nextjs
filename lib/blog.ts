@@ -1,6 +1,7 @@
 import { Post } from "@ts-ghost/content-api";
 import { contentApi as api } from "./ghost";
 
+// dùng response.data nha
 export async function getAllBlog(): Promise<Array<Post>> {
   const response: any = await api.posts.browse({ limit: "all" }).fetch();
   if (!response.success || !response["data"]) {
@@ -9,6 +10,8 @@ export async function getAllBlog(): Promise<Array<Post>> {
   return response["data"] as Array<Post>;
 }
 
+
+// em nên khai báo interface và dùng pro gọn cho dễ đọc, nhớ mô tả cái hàm này chút
 export async function getPostPerPage({
   query = "",
   tags = "",

@@ -1,8 +1,9 @@
-import { FC, SVGProps } from "react";
+import type { FC, SVGProps } from "react";
 
 const HomeIcon: FC<SVGProps<SVGSVGElement>> = () => (
   <svg
-    className={`w-4 h-4 mr-2 text-white dark:text-white`}
+    // cái string className này ko cần xử lý đặc biệt gì thêm, em làm bình thường thôi
+    className="w-4 h-4 mr-2 text-white dark:text-white"
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
     width="24"

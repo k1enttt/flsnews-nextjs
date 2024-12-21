@@ -1,5 +1,7 @@
+// mấy hàm này cần viết vài dòng giải thích nó làm gì và cách xài
+
 import { getAllTags } from "./tag";
-import { MinimalTag } from "./types";
+import type { MinimalTag } from "./types";
 
 export function formatDate(datetimeString: string | null | undefined) {
   if (!datetimeString) {
