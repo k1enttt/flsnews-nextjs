@@ -31,7 +31,7 @@ const Blog = ({ blog }: { blog: Post }) => {
 
     if (article) {
       html2pdf(article, {
-        margin: 1,
+        margin: [15, 5],
         filename: `${slug}.pdf`,
         jsPDF: {
           format: "a4",
