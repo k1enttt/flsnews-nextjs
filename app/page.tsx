@@ -3,7 +3,7 @@ import HomeLayout from "@/components/HomeLayout";
 import { PostPagination } from "@/components/Pagination";
 import { getPostPerPage } from "@/lib/blog";
 import { getTagTree } from "@/lib/utils";
-import { Post } from "@ts-ghost/content-api";
+import type { Post } from "@ts-ghost/content-api";
 
 export default async function Home({
   searchParams,
@@ -14,7 +14,7 @@ export default async function Home({
     tags: string;
   };
 }) {
-  const validatePage: number = parseInt(searchParams.page || "1");
+  const validatePage: number = Number.parseInt(searchParams.page || "1");
   const pageIndex: number = validatePage >= 1 ? validatePage : 1;
   const selectedTags: string = searchParams.tags || "";
 
