@@ -1,6 +1,6 @@
 "use client";
 import { formatDate } from "@/lib/utils";
-import { Post } from "@ts-ghost/content-api";
+import type { Post } from "@ts-ghost/content-api";
 import { useRouter } from "next/navigation";
 
 const Blog = ({ blog }: { blog: Post }) => {

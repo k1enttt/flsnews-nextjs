@@ -1,7 +1,7 @@
 import Blog from "@/components/blog-page/Blog";
 import BlogLayout from "@/components/blog-page/BlogLayout";
 import { getBlogBySlug } from "@/lib/blog";
-import { Post } from "@ts-ghost/content-api";
+import type{ Post } from "@ts-ghost/content-api";
 import { notFound } from "next/navigation";
 
 export default async function BlogPage({
