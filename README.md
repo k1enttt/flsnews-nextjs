@@ -9,6 +9,8 @@ First, install the dependencies:
 npm i
 ```
 
+
+<!-- em  hãy tạo file env.example, giải thích cách xài, sau đó em hướng dẫn copy từ file example sau đó sửa lại-->
 Second, define your GhostCMS url and content api key in `.env`:
 ```json
 GHOST_URL="https://yourghostdomain.com"

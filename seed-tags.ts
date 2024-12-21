@@ -2,6 +2,8 @@ import { TSGhostAdminAPI } from "@ts-ghost/admin-api";
 import dotenv from "dotenv";
 import { tags } from "./sample-data.js";
 
+// file này cũng cùng issue của seed-posts, coi và sửa lại nha
+
 dotenv.config();
 const adminApi = new TSGhostAdminAPI(
   process.env.GHOST_URL || "",

@@ -8,9 +8,13 @@ const adminApi = new TSGhostAdminAPI(
   "v5.104.2"
 );
 
+
+// Viết xíu mô tả vào đây để biết hàm này làm gì, xài sao
 async function getAllTags(): Promise<string[]> {
+  // em hạn chế dùng any kiểu này, tập làm tới đâu thì object tới đó 
   const response: any = await adminApi.tags.browse({ limit: "all" }).fetch();
 
+  // em nên dùng response.data luôn ở đây, phải đọc tài liệu hoặc rê chuột vào tag.brow... là nó lòi ra
   if (!response.success || !response["data"]) {
     return [];
   }
@@ -28,7 +32,7 @@ type Post = {
   feature_image: string;
   feature_image_alt: string;
 };
-
+// Viết xíu mô tả vào đây để biết hàm này làm gì, xài sao
 function generatePosts(numberOfPosts: number, tags: string[]): Post[] {
   const posts: Post[] = [];
 
@@ -50,7 +54,7 @@ function generatePosts(numberOfPosts: number, tags: string[]): Post[] {
   }
   return posts;
 }
-
+// Viết xíu mô tả vào đây để biết hàm này làm gì, xài sao
 async function postPost(post: Post) {
   const response: any = await adminApi.posts.add(post, { source: "html" });
   if (!response.success) {
