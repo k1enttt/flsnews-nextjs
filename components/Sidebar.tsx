@@ -1,6 +1,6 @@
 import React from "react";
 import AccordianTags from "./SidebarAccordianTags";
-import { MinimalTag } from "@/lib/types";
+import type { MinimalTag } from "@/lib/types";
 
 function Sidebar({ tags }: { tags: Record<string, MinimalTag[]>[] }) {
   return (

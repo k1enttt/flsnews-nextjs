@@ -1,5 +1,5 @@
 "use client";
-import { MinimalTag } from "@/lib/types";
+import type { MinimalTag } from "@/lib/types";
 import { Accordion } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
