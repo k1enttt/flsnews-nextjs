@@ -5,3 +5,10 @@
 .footer-link {
     @apply hover:underline hover:text-blue;
 }
+
+@layer base {
+    /* Style img "display initial" dùng để sửa lỗi hiển thị pdf của bài viết */
+    img {
+        display: initial;
+    }
+}
