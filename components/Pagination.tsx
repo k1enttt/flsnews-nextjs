@@ -1,6 +1,7 @@
 "use client";
 
-import { CustomFlowbiteTheme, Pagination } from "flowbite-react";
+import type { CustomFlowbiteTheme } from "flowbite-react";
+import { Pagination } from "flowbite-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 

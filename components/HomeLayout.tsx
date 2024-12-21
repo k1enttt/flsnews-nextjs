@@ -1,6 +1,6 @@
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import { MinimalTag } from "@/lib/types";
+import type { MinimalTag } from "@/lib/types";
 
 export default function HomeLayout({
   children,

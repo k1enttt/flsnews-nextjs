@@ -1,5 +1,6 @@
 "use client";
-import { Breadcrumb, BreadcrumbComponentProps, BreadcrumbItemProps } from "flowbite-react";
+import type { BreadcrumbComponentProps, BreadcrumbItemProps } from "flowbite-react";
+import {Breadcrumb} from "flowbite-react";
 import HomeIcon from "@/lib/icons/home";
 
 export default function BlogBreadcrumb() {

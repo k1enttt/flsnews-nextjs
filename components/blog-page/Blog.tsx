@@ -1,6 +1,6 @@
 "use client";
 import { formatDate } from "@/lib/utils";
-import { Post } from "@ts-ghost/content-api";
+import type { Post } from "@ts-ghost/content-api";
 import { useRouter } from "next/navigation";
 
 const Blog = ({ blog }: { blog: Post }) => {
@@ -186,6 +186,7 @@ const Blog = ({ blog }: { blog: Post }) => {
             </span>
             <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
               {/* LinkedIn icon */}
+              {/* mấy cái link này nên có aria label để web mình tương thích khiếm thị */}
               <a
                 href="https://www.linkedin.com/company/flsgroup"
                 className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
