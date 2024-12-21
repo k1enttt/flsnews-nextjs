@@ -1,11 +1,13 @@
 "use client";
 import { formatDate } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
-import { useRouter } from "next/navigation";
 
 const Blog = ({ blog }: { blog: Post }) => {
   const route = useRouter();
-  const { title, primary_author, html, published_at } = blog;
+  const pathname = usePathname();
+
+  const { title, slug, primary_author, html, published_at } = blog;
 
   const {
     value: dateValue,
@@ -23,15 +25,35 @@ const Blog = ({ blog }: { blog: Post }) => {
       }
     : null;
 
+  const exportToPdf = async () => {
+    const html2pdf = await require("html2pdf.js");
+    const article = document.querySelector("#blog");
+
+    if (article) {
+      html2pdf(article, {
+        margin: 1,
+        filename: `${slug}.pdf`,
+        jsPDF: {
+          format: "a4",
+          orientation: "portrait",
+        },
+      });
+    }
+  };
+
   return (
     <>
       {/* Thẻ main là bài blog + phần comment */}
       <main className="pt-8 pb-16 lg:pt-24 lg:pb-24 text-white antialiased font-gotham-book">
         <div className="flex justify-between px-4 mx-auto max-w-screen-xl">
-          <article className="mx-auto w-full max-w-2xl lg:format-lg space-y-4">
+          <article
+            className="mx-auto w-full max-w-2xl lg:format-lg space-y-4"
+            id="blog"
+          >
             <header className="mb-4 lg:mb-6">
               {/* Back button */}
-              <div className="mb-4">
+              {/* Prop data-html2canvas-ignore dùng để tránh thẻ đó bị xuất thành pdf */}
+              <div className="mb-4" data-html2canvas-ignore>
                 <button
                   type="button"
                   className="flex items-center p-2 text-white bg-green hover:underline"
@@ -60,11 +82,12 @@ const Blog = ({ blog }: { blog: Post }) => {
             {formatedHtml && <div dangerouslySetInnerHTML={formatedHtml}></div>}
 
             {/* Export to PDF button */}
-            <section>
+            <section data-html2canvas-ignore>
               <div className="mt-8">
                 <button
                   type="button"
                   className="flex items-center p-2 text-white bg-green hover:underline"
+                  onClick={() => exportToPdf()}
                 >
                   Export to PDF
                 </button>

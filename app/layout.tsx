@@ -30,7 +30,7 @@ const gothamBold = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('http://localhost:3000'),
+  metadataBase: new URL("http://localhost:3000"),
   title: "FLS Case Studies",
   description: "FLS Case Study Library",
   openGraph: {
@@ -49,7 +49,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${conthraxHeavy.variable} ${conthraxBold.variable} ${gothamBold.variable} ${gothamBook.variable}  bg-blue-dark`}>
+      <body
+        className={`${conthraxHeavy.variable} ${conthraxBold.variable} ${gothamBold.variable} ${gothamBook.variable}  bg-blue-dark`}
+      >
         {/* Phần nội dung main + layout của trang home */}
         {children}
 

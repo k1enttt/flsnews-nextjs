@@ -3,7 +3,7 @@ import HomeLayout from "@/components/HomeLayout";
 import { PostPagination } from "@/components/Pagination";
 import { getPostPerPage } from "@/lib/blog";
 import { getTagTree } from "@/lib/utils";
-import { Post } from "@ts-ghost/content-api";
+import type { Post } from "@ts-ghost/content-api";
 
 export default async function Home({
   searchParams,
