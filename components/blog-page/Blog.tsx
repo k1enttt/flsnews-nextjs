@@ -1,6 +1,8 @@
 "use client";
 import {
   formatDate,
+  replaceWordToSpan,
+  splitTextIntoWords,
 } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
@@ -18,30 +20,66 @@ const Blog = ({ blog }: { blog: Post }) => {
 
   // [Explain] Thay đổi link ảnh có trong nội dung post từ localhost sang domain của mình vì thực tế ghostcms đang được host trên local và public bằng cloudflare tunnel
   const formatedHtml = html
-    ? {
-        __html: `<div class="space-y-6">${
-          html
-            .replaceAll("http://localhost:8080", "https://ghost.kienttt.site")
-            .replaceAll("<strong>", '<strong class="font-bold">') as TrustedHTML
-        }</div>`,
-      }
-    : null;
+    ? `<div class='space-y-4'>${html.replaceAll(
+        "http://localhost:8080",
+        "https://ghost.kienttt.site"
+      )}</div>`
+    : "";
+
+  const dangerouslySetPostHTML = { __html: formatedHtml };
 
   const exportToPdf = async () => {
     const html2pdf = await require("html2pdf.js");
-    const article = document.querySelector("#blog")
-    const options = {
-      margin: 15,
-      filename: `${slug}.pdf`,
-      jsPDF: {
-        format: "a4",
-        orientation: "portrait",
-      },
-      // [Explain] "useCORS: true" dùng để tránh lỗi mất hình ảnh khi xuất pdf
-      html2canvas: { useCORS: true },
-    };
+    // const article = document.querySelector("#blog")?.cloneNode(true) as HTMLElement;
+    const article = document.getElementById("blog");
 
     if (article) {
+      // Trích xuất tất cả innerText của thẻ <p> trong article mà không có id "author"
+      const pTags = Array.from(article.querySelectorAll("p")).filter(
+        (pTag) => pTag.id !== "author"
+      );
+
+      // Tách các thẻ <p> thành từng thẻ <span> chứa mỗi chữ trong thẻ <p>
+      pTags.forEach((pTag) => {
+        const html = pTag.innerHTML;
+        // 1. Lấy innerText của thẻ <p>
+        const text = pTag.innerText;
+
+        // 2. Tách innerText thành từng từ
+        const wordSpans = splitTextIntoWords(text);
+
+        // 3. Thay thế từng từ bằng thẻ <span> chứa từng từ
+        for (let i = 0; i < wordSpans.length; i++) {
+          const span = document.createElement("span");
+          span.innerHTML = wordSpans[i];
+
+          pTag.innerHTML = replaceWordToSpan(
+            pTag.innerHTML,
+            wordSpans[i],
+            span.outerHTML
+          );
+        }
+
+        // 4. Thay thể innerHTML cũ bằng innerHTML mới
+        article.innerHTML = article.innerHTML.replace(
+          html,
+          pTag.innerHTML.trim()
+        );
+      });
+
+      const options = {
+        margin: 16,
+        filename: `${slug}.pdf`,
+        jsPDF: {
+          format: "a4",
+          orientation: "portrait",
+        },
+        pagebreak: { avoid: "span"},
+        compressPDF: true,
+        // [Explain] "useCORS: true" dùng để tránh lỗi mất hình ảnh khi xuất pdf
+        html2canvas: { useCORS: true },
+      };
+
       html2pdf().from(article).set(options).save();
     }
   };
@@ -49,10 +87,12 @@ const Blog = ({ blog }: { blog: Post }) => {
   return (
     <>
       {/* Thẻ main là bài blog + phần comment */}
-      <main className="pt-8 pb-16 lg:pt-24 lg:pb-24 text-white antialiased font-gotham-book">
+      <main 
+      className="pt-8 pb-16 lg:pt-24 lg:pb-24 text-white antialiased font-gotham-book">
         <div className="flex justify-between px-4 mx-auto max-w-screen-xl">
+          {/* Style padding `p-1` của thẻ <article> dùng để tránh lỗi nội dung pdf bị cắt xén ở cuối. */}
           <article
-            className="mx-auto w-full max-w-2xl lg:format-lg space-y-4"
+            className="mx-auto w-full max-w-2xl lg:format-lg space-y-4 p-1"
             id="blog"
           >
             <header className="mb-4 lg:mb-6">
@@ -71,7 +111,7 @@ const Blog = ({ blog }: { blog: Post }) => {
               <h1 className="mb-4 text-3xl font-extrabold leading-tight lg:mb-6 font-conthrax-bold">
                 {title.toUpperCase()}
               </h1>
-              <p>
+              <p id="author">
                 <i>
                   By <b>{primary_author ? primary_author.name : "Anonymous"}</b>
                 </i>{" "}
@@ -84,7 +124,9 @@ const Blog = ({ blog }: { blog: Post }) => {
             {/* Nội dung bài blog */}
             {/* [Explain] Để áp dụng style cho các thẻ html trong nội dung bài viết thì cần khai báo style ở global.css, nhưng nếu làm vậy các style ở tất cả các trang khác sẽ bị ảnh hưởng. 
             Vì thế chưa có cách nào khác để áp dụng style cho nội dung bài viết*/}
-            {formatedHtml && <div dangerouslySetInnerHTML={formatedHtml}></div>}
+            {formatedHtml && (
+              <div dangerouslySetInnerHTML={dangerouslySetPostHTML}></div>
+            )}
 
             {/* Export to PDF button */}
             <section data-html2canvas-ignore>

@@ -160,3 +160,94 @@ function getOrdinalSuffix(day: number): string {
     }
   }
 }
+
+/**
+ * Tách một đoạn văn thành các câu và bọc mỗi câu trong thẻ <span>
+ * @param {string} text
+ * @returns {string[]}
+ */
+export function splitParagraphIntoSentences(text: string): string[] {
+  // Biểu thức chính quy cơ bản để tách câu
+  // const regex = /[?.!]\s+/g;
+  // Biểu thức chính quy để tách câu và giữ lại dấu câu cuối câu
+  const regex = /[.?!]/g;
+
+  // Tách chuỗi thành mảng các câu
+  const sentences = text.split(regex);
+
+  // Kết hợp lại các câu và dấu câu
+  const result: string[] = [];
+  for (let i = 0; i < sentences.length - 1; i++) {
+    result.push(sentences[i] + sentences[i + 1]);
+  }
+
+  // Loại bỏ các phần tử rỗng
+  return result.map((sentence) => `<span>${sentence}</span>`);
+}
+
+/**
+ * Trả về mảng các từ trong một đoạn văn được cách nhau bởi khoảng trắng
+ * @param text Tách một đoạn văn thành các từ
+ * @returns Mảng các từ trong đoạn văn
+ */
+export function splitTextIntoWords(text: string): string[] {
+  // Biểu thức chính quy để tách chữ và giữ nguyên dấu câu
+  const regex = /\s+/g; // Tách theo khoảng trắng, nhưng không bao gồm khoảng trắng trước dấu câu
+
+  // Tách chuỗi thành mảng các từ và dấu câu
+  const words = text.split(regex);
+
+  return words;
+}
+
+function escapeSpecialCharacters(str: string): string {
+  return str.replace(/[\?\+\*.]/g, "\\$&");
+}
+
+/**
+ * Thay thế một từ trong một đoạn văn bản, nhưng không thay thế nếu từ đó đã được bọc trong thẻ <span>
+ * @param paragraph Đoạn van cần thay thế
+ * @param wordToReplace Từ cần thay thế
+ * @param replacement Từ thay thế
+ * @returns Đoạn văn sau khi thay thế
+ */
+export function replaceWordToSpan(
+  text: string,
+  wordToReplace: string,
+  replacement: string
+): string {
+  // Biểu thức chính quy tìm kiếm từ "không" không nằm trong thẻ span
+  const escapedWord = escapeSpecialCharacters(wordToReplace);
+  const regex = new RegExp(
+    String.raw`\s?${escapedWord}\s|\s${escapedWord}\s?(?!<\/span>)`,
+    "g"
+  );
+  console.log("Literal special characters: " + regex);
+  // const regex = "2024,";
+
+  // Thay thế tất cả các từ "không" tìm thấy
+  return text.replace(regex, ` ${replacement} `);
+}
+
+// function replaceWords(
+//   text: string,
+//   wordToReplace: string,
+//   replacement: string
+// ): string {
+//   // Biểu thức chính quy tìm kiếm từ "không" không nằm trong thẻ span
+//   const regex = new RegExp(
+//     `\\s?${escapeSpecialCharacters(wordToReplace)}\\s|\\s2024,\\s?(?!<\/span>)`,
+//     "g"
+//   );
+//   console.log("Literal special characters: " + regex);
+
+//   // Thay thế tất cả các từ "không" tìm thấy
+//   return text.replace(regex, `${replacement}`);
+// }
+
+// // Ví dụ sử dụng:
+// const text =
+//   '<p>Đây là một đoạn văn bản có chứa từ "không" 2024, và 2024,</span> và 2024 không. không và <span>không nên</span> thay đổi.</p>';
+// const newText = replaceWords(text, "2024,", "rất");
+
+// console.log("replaceKhong \n" + newText); // Output: <p>Đây là một đoạn văn bản có chứa từ "rất" và <span>không nên</span> thay đổi.</p>
