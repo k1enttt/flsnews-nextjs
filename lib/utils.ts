@@ -223,6 +223,6 @@ export function replaceWordToSpan(
     ""
   );
 
-  // Thay thế tất cả các từ "không" tìm thấy
+  // Thay thế từ tìm thấy đầu tiên, nếu muốn thay thế tất cả thì thêm "g" vào cuối regex
   return text.replace(regex, ` ${replacement} `);
 }

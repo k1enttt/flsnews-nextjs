@@ -30,8 +30,8 @@ const Blog = ({ blog }: { blog: Post }) => {
 
   const exportToPdf = async () => {
     const html2pdf = await require("html2pdf.js");
-    // const article = document.querySelector("#blog")?.cloneNode(true) as HTMLElement;
-    const article = document.getElementById("blog");
+    const article = document.querySelector("#blog")?.cloneNode(true) as HTMLElement;
+    // const article = document.getElementById("blog");
 
     if (article) {
       // Trích xuất tất cả innerText của thẻ <p> trong article mà không có id "author"
