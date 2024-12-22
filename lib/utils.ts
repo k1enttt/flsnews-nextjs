@@ -217,37 +217,12 @@ export function replaceWordToSpan(
   replacement: string
 ): string {
   // Biểu thức chính quy tìm kiếm từ "không" không nằm trong thẻ span
-  const escapedWord = escapeSpecialCharacters(wordToReplace);
+  const escapedWord: string = escapeSpecialCharacters(wordToReplace);
   const regex = new RegExp(
     String.raw`\s?${escapedWord}\s|\s${escapedWord}\s?(?!<\/span>)`,
-    "g"
+    ""
   );
-  console.log("Literal special characters: " + regex);
-  // const regex = "2024,";
 
   // Thay thế tất cả các từ "không" tìm thấy
   return text.replace(regex, ` ${replacement} `);
 }
-
-// function replaceWords(
-//   text: string,
-//   wordToReplace: string,
-//   replacement: string
-// ): string {
-//   // Biểu thức chính quy tìm kiếm từ "không" không nằm trong thẻ span
-//   const regex = new RegExp(
-//     `\\s?${escapeSpecialCharacters(wordToReplace)}\\s|\\s2024,\\s?(?!<\/span>)`,
-//     "g"
-//   );
-//   console.log("Literal special characters: " + regex);
-
-//   // Thay thế tất cả các từ "không" tìm thấy
-//   return text.replace(regex, `${replacement}`);
-// }
-
-// // Ví dụ sử dụng:
-// const text =
-//   '<p>Đây là một đoạn văn bản có chứa từ "không" 2024, và 2024,</span> và 2024 không. không và <span>không nên</span> thay đổi.</p>';
-// const newText = replaceWords(text, "2024,", "rất");
-
-// console.log("replaceKhong \n" + newText); // Output: <p>Đây là một đoạn văn bản có chứa từ "rất" và <span>không nên</span> thay đổi.</p>
