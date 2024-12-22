@@ -1,9 +1,5 @@
 "use client";
-import {
-  formatDate,
-  replaceWordToSpan,
-  splitTextIntoWords,
-} from "@/lib/utils";
+import { formatDate, replaceWordToSpan, splitTextIntoWords } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
 
@@ -30,7 +26,9 @@ const Blog = ({ blog }: { blog: Post }) => {
 
   const exportToPdf = async () => {
     const html2pdf = await require("html2pdf.js");
-    const article = document.querySelector("#blog")?.cloneNode(true) as HTMLElement;
+    const article = document
+      .querySelector("#blog")
+      ?.cloneNode(true) as HTMLElement;
     // const article = document.getElementById("blog");
 
     if (article) {
@@ -74,7 +72,7 @@ const Blog = ({ blog }: { blog: Post }) => {
           format: "a4",
           orientation: "portrait",
         },
-        pagebreak: { avoid: "span"},
+        pagebreak: { avoid: "span" },
         compressPDF: true,
         // [Explain] "useCORS: true" dùng để tránh lỗi mất hình ảnh khi xuất pdf
         html2canvas: { useCORS: true },
@@ -87,8 +85,7 @@ const Blog = ({ blog }: { blog: Post }) => {
   return (
     <>
       {/* Thẻ main là bài blog + phần comment */}
-      <main 
-      className="pt-8 pb-16 lg:pt-24 lg:pb-24 text-white antialiased font-gotham-book">
+      <main className="pt-8 pb-16 lg:pt-24 lg:pb-24 text-white antialiased font-gotham-book">
         <div className="flex justify-between px-4 mx-auto max-w-screen-xl">
           {/* Style padding `p-1` của thẻ <article> dùng để tránh lỗi nội dung pdf bị cắt xén ở cuối. */}
           <article
@@ -257,6 +254,7 @@ const Blog = ({ blog }: { blog: Post }) => {
             <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
               {/* LinkedIn icon */}
               <a
+                aria-label="LinkedIn"
                 href="https://www.linkedin.com/company/flsgroup"
                 className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
               >
@@ -279,6 +277,7 @@ const Blog = ({ blog }: { blog: Post }) => {
               </a>
               {/* Facebook icon */}
               <a
+                aria-label="Facebook"
                 href="https://www.facebook.com/FLSGroup1993"
                 className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
               >
@@ -297,6 +296,7 @@ const Blog = ({ blog }: { blog: Post }) => {
               </a>
               {/* Youtube icon */}
               <a
+                aria-label="Youtube"
                 href="https://www.youtube.com/c/FLSGroup"
                 className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
               >
