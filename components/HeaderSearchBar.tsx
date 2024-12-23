@@ -1,9 +1,8 @@
 "use client";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const SearchBar = () => {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
   const { replace } = useRouter();
 
   const onQueryChange = (term: string) => {
@@ -19,7 +18,7 @@ const SearchBar = () => {
     } else {
       newSearchParams.delete("query");
     }
-    replace(`${pathname}?${newSearchParams.toString()}`);
+    replace(`/?${newSearchParams.toString()}`);
   };
   const onSubmit = (formData: FormData) => {
     onQueryChange(formData.get("query") as string);
