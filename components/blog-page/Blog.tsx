@@ -25,12 +25,14 @@ const Blog = ({ blog }: { blog: Post }) => {
   const dangerouslySetPostHTML = { __html: formatedHtml };
 
   const exportToPdf = async () => {
-    const html2pdf = await require("html2pdf.js");
+    // Copy nội dung bài viết để tiền xử lý nội dung trước khi xuất pdf
     const article = document
-      .querySelector("#blog")
+      .getElementById("blog")
       ?.cloneNode(true) as HTMLElement;
     // const article = document.getElementById("blog");
 
+    // Tiền xử lý nội dung bài viết, là tách từng từ trong thẻ <p> thành từng thẻ <span>
+    // Ví dụ: <p>Hello world</p> sẽ thành <p><span>Hello</span> <span>world</span></p>
     if (article) {
       // Trích xuất tất cả innerText của thẻ <p> trong article mà không có id "author"
       const pTags = Array.from(article.querySelectorAll("p")).filter(
@@ -65,20 +67,22 @@ const Blog = ({ blog }: { blog: Post }) => {
         );
       });
 
+      // Cấu hình xuất pdf
       const options = {
         margin: 16,
         filename: `${slug}.pdf`,
         jsPDF: {
           format: "a4",
           orientation: "portrait",
+          compressPDF: true,
         },
-        pagebreak: { avoid: "span" },
-        compressPDF: true,
         // [Explain] "useCORS: true" dùng để tránh lỗi mất hình ảnh khi xuất pdf
         html2canvas: { useCORS: true },
+        pagebreak: { avoid: ["span", "figure"] },
       };
 
-      html2pdf().from(article).set(options).save();
+      // Xuất pdf
+      await require("html2pdf.js")().from(article).set(options).save();
     }
   };
 
@@ -86,47 +90,47 @@ const Blog = ({ blog }: { blog: Post }) => {
     <>
       {/* Thẻ main là bài blog + phần comment */}
       <main className="pt-8 pb-16 lg:pt-24 lg:pb-24 text-white antialiased font-gotham-book">
-        <div className="flex justify-between px-4 mx-auto max-w-screen-xl">
-          {/* Style padding `p-1` của thẻ <article> dùng để tránh lỗi nội dung pdf bị cắt xén ở cuối. */}
-          <article
-            className="mx-auto w-full max-w-2xl lg:format-lg space-y-4 p-1"
-            id="blog"
-          >
-            <header className="mb-4 lg:mb-6">
-              {/* Back button */}
-              {/* Prop data-html2canvas-ignore dùng để tránh thẻ đó bị xuất thành pdf */}
-              <div className="mb-4" data-html2canvas-ignore>
-                <button
-                  type="button"
-                  className="flex items-center p-2 text-white bg-green hover:underline"
-                  onClick={() => route.back()}
-                >
-                  Back
-                </button>
-              </div>
-              {/* Tựa bài blog */}
-              <h1 className="mb-4 text-3xl font-extrabold leading-tight lg:mb-6 font-conthrax-bold">
-                {title.toUpperCase()}
-              </h1>
-              <p id="author">
-                <i>
-                  By <b>{primary_author ? primary_author.name : "Anonymous"}</b>
-                </i>{" "}
-                on{" "}
-                <time dateTime={datetime} title={dateTitle}>
-                  {dateValue}
-                </time>
-              </p>
-            </header>
-            {/* Nội dung bài blog */}
-            {/* [Explain] Để áp dụng style cho các thẻ html trong nội dung bài viết thì cần khai báo style ở global.css, nhưng nếu làm vậy các style ở tất cả các trang khác sẽ bị ảnh hưởng. 
+        <div className="flex flex-col justify-between px-4 mx-auto max-w-screen-xl">
+          {/* Style padding `p-1` của thẻ <article> dùng để tránh lỗi nội dung chữ của pdf bị cắt xén. */}
+          <div className="mx-auto w-full max-w-2xl lg:format-lg space-y-4 pb-1">
+            {/* Back button */}
+            {/* Prop data-html2canvas-ignore dùng để tránh thẻ đó bị xuất thành pdf */}
+            {/* Lưu ý: không nên dùng data-html2canvas-ignore vì làm cho pagebreak đặt không đúng chỗ */}
+            <div className="mb-4">
+              <button
+                type="button"
+                className="flex items-center p-2 text-white bg-green hover:underline"
+                onClick={() => route.back()}
+              >
+                Back
+              </button>
+            </div>
+            <article id="blog">
+              <header className="mb-4 lg:mb-6">
+                {/* Tựa bài blog */}
+                <h1 className="mb-4 text-3xl font-extrabold leading-tight lg:mb-6 font-conthrax-bold">
+                  {title.toUpperCase()}
+                </h1>
+                <p id="author">
+                  <i>
+                    By{" "}
+                    <b>{primary_author ? primary_author.name : "Anonymous"}</b>
+                  </i>{" "}
+                  on{" "}
+                  <time dateTime={datetime} title={dateTitle}>
+                    {dateValue}
+                  </time>
+                </p>
+              </header>
+              {/* Nội dung bài blog */}
+              {/* [Explain] Để áp dụng style cho các thẻ html trong nội dung bài viết thì cần khai báo style ở global.css, nhưng nếu làm vậy các style ở tất cả các trang khác sẽ bị ảnh hưởng. 
             Vì thế chưa có cách nào khác để áp dụng style cho nội dung bài viết*/}
-            {formatedHtml && (
-              <div dangerouslySetInnerHTML={dangerouslySetPostHTML}></div>
-            )}
-
+              {formatedHtml && (
+                <div dangerouslySetInnerHTML={dangerouslySetPostHTML}></div>
+              )}
+            </article>
             {/* Export to PDF button */}
-            <section data-html2canvas-ignore>
+            <section>
               <div className="mt-8">
                 <button
                   type="button"
@@ -137,7 +141,7 @@ const Blog = ({ blog }: { blog: Post }) => {
                 </button>
               </div>
             </section>
-          </article>
+          </div>
         </div>
       </main>
       {/* Footer của trang */}

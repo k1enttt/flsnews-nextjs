@@ -226,3 +226,24 @@ export function replaceWordToSpan(
   // Thay thế từ tìm thấy đầu tiên, nếu muốn thay thế tất cả thì thêm "g" vào cuối regex
   return text.replace(regex, ` ${replacement} `);
 }
+
+/**
+ * Trả về innerHTML của HTMLElement với tất cả `targetElement` có trong đó được thêm class
+ * @param html HTMLElement chứa các element cần thêm class
+ * @param targetElement Element cần thêm class
+ * @param newClass Class cần thêm vào element
+ * @returns innerHTML của HTMLElement sau khi thêm class
+ */
+export function addClass(html: HTMLElement | null, targetElement: string, newClass: string[]): string {
+  if (!html) {
+    return "";
+  }
+  html.querySelectorAll(targetElement).forEach((e) => {
+    const outerHTML = e.outerHTML;
+
+    // Thêm class border-black vào tất cả ảnh
+    e.classList.add(...newClass);
+    html.innerHTML = html.innerHTML.replace(outerHTML, e.outerHTML);
+  });
+  return html.innerHTML;
+}

@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .footer-link {
-    @apply hover:underline hover:text-blue;
+  @apply hover:underline hover:text-blue;
 }
