@@ -234,16 +234,159 @@ export function replaceWordToSpan(
  * @param newClass Class cần thêm vào element
  * @returns innerHTML của HTMLElement sau khi thêm class
  */
-export function addClass(html: HTMLElement | null, targetElement: string, newClass: string[]): string {
+export function addClass(
+  html: HTMLElement | string | null,
+  targetElement: string,
+  newClass: string[]
+): string {
   if (!html) {
     return "";
   }
-  html.querySelectorAll(targetElement).forEach((e) => {
+
+  let htmlElement: HTMLElement = html as HTMLElement;
+  if (typeof html === "string") {
+    htmlElement = new DOMParser().parseFromString(html, "text/html").body;
+  }
+
+  htmlElement.querySelectorAll(targetElement).forEach((e) => {
     const outerHTML = e.outerHTML;
 
     // Thêm class border-black vào tất cả ảnh
     e.classList.add(...newClass);
+    htmlElement.innerHTML = htmlElement.innerHTML.replace(outerHTML, e.outerHTML);
+  });
+  return htmlElement.innerHTML;
+}
+
+/**
+ * Trả về innerHTML của HTMLElement với tất cả `targetElement` có trong đó class được thay thế
+ * @param html HTMLElement chứa các element cần thêm class
+ * @param targetElement Element cần thêm class
+ * @param newClass Class thay thế cho element
+ * @returns innerHTML của HTMLElement sau khi thay thế class
+ */
+export function replaceImageDimensions(
+  html: HTMLElement | null,
+  dimensionList: {
+    width: number;
+    height: number;
+  }[]
+): string {
+  if (!html) {
+    return "";
+  }
+  let index = 0;
+  html.querySelectorAll("img").forEach((e) => {
+    const outerHTML = e.outerHTML;
+
+    // Thay thế thuộc tính width và height bằng width và height mới
+    if (dimensionList[index]) {
+      e.setAttribute("width", dimensionList[index].width.toString());
+      e.setAttribute("height", dimensionList[index].height.toString());
+    } 
+    else {
+      e.setAttribute("width", "672");
+      e.setAttribute("height", "400");
+    }
+    
     html.innerHTML = html.innerHTML.replace(outerHTML, e.outerHTML);
+    index++;
   });
   return html.innerHTML;
+}
+
+/**
+ * Lấy file pdf từ server và lưu về máy của người dùng
+ * @param slug slug của bài viết
+ */
+export async function savePdf(slug: string) {
+  const reponse = await fetch(`/api/${slug}/pdf`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  // Create a temporary anchor element to trigger the download
+  const url = window.URL.createObjectURL(new Blob([await reponse.blob()]));
+  const link = document.createElement("a");
+  link.href = url;
+
+  // Setting filename received in response
+  link.setAttribute("download", `${slug}.pdf`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+import parser from "html-react-parser";
+
+/**
+ * Trả về chuỗi HTML sau khi thay đổi thuộc tính loading của thẻ img
+ * @param htmlString Chuỗi HTML cần thay đổi thuộc tính loading của thẻ img
+ * @returns Chuỗi HTML sau khi thay đổi thuộc tính loading của thẻ img
+ */
+export function replaceLazyLoading(htmlString: string) {
+  // Sử dụng hàm parse để chuyển đổi HTML string thành các node React
+  const parsedHTML = parser(htmlString, {
+    replace: (node) => {
+      if (
+        node.type === "tag" &&
+        node.name === "img" &&
+        node.attribs &&
+        node.attribs.loading === "lazy"
+      ) {
+        return {
+          ...node,
+          props: {
+            ...node.attribs,
+            loading: "eager",
+          },
+        };
+      }
+      return node;
+    },
+  });
+
+  // Chuyển đổi lại thành HTML string
+  return parsedHTML;
+}
+
+/**
+ * Xóa tất cả các ký tự "\" trong chuỗi HTML
+ * @param htmlString Chuỗi HTML cần xóa ký tự "\"
+ * @returns Chuỗi HTML sau khi xóa ký tự "\"
+ */
+export function removeEscapeCharacters(htmlString: string): string {
+  // Thay thế tất cả các cặp "\" bằng "" (rỗng)
+  return htmlString.replace(/\\/g, "");
+}
+
+/**
+ * Xóa tất cả các thẻ figure và figcaption trong một element
+ * @param element Nội dung HTML cần xóa thẻ figure và figcaption
+ */
+export function removeFigureAndFigcaption(element: HTMLElement) {
+  // Chọn tất cả các thẻ figure và figcaption
+  const figures = element.querySelectorAll("figure, figcaption");
+
+  // Duyệt qua từng thẻ và thay thế bằng nội dung con của nó
+  figures.forEach((figure) => {
+    const parent = figure.parentNode;
+    while (figure.firstChild) {
+      parent!.insertBefore(figure.firstChild, figure);
+    }
+    parent!.removeChild(figure);
+  });
+}
+
+/**
+ * Đợi 1 khoảng thời gian (ms)
+ * @param time Thời gian (ms) mà bạn muốn tạm dừng
+ * @returns Hàm setTimeout chạy với thời gian đã nhập
+ */
+export function delay(time: number) {
+  return new Promise(function(resolve) { 
+      setTimeout(resolve, time)
+  });
 }

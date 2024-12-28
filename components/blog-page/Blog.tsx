@@ -1,7 +1,13 @@
 "use client";
-import { formatDate, replaceWordToSpan, splitTextIntoWords } from "@/lib/utils";
+import {
+  addClass,
+  formatDate,
+  replaceImageDimensions,
+  savePdf,
+} from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
+import { createPdfByPuppeteer } from "@/lib/puppeteer";
 
 const Blog = ({ blog }: { blog: Post }) => {
   const route = useRouter();
@@ -15,74 +21,54 @@ const Blog = ({ blog }: { blog: Post }) => {
   } = formatDate(published_at) || {};
 
   // [Explain] Thay đổi link ảnh có trong nội dung post từ localhost sang domain của mình vì thực tế ghostcms đang được host trên local và public bằng cloudflare tunnel
-  const formatedHtml = html
-    ? `<div class='space-y-4'>${html.replaceAll(
-        "http://localhost:8080",
-        "https://ghost.kienttt.site"
-      )}</div>`
-    : "";
+  const replaceLocalhostHtml = html.replaceAll(
+    "http://localhost:8080",
+    "https://ghost.kienttt.site"
+  );
 
-  const dangerouslySetPostHTML = { __html: formatedHtml };
+  // Thêm class "flex flex-col items-center" vào thẻ <figure> để căn giữa ảnh trong bài viết
+  const formatedHtml = addClass(
+    `<div class='space-y-4 w-full'>${replaceLocalhostHtml}</div>`,
+    "figure",
+    ["w-full", "flex", "flex-col", "items-center", "justify-center"]
+  );
 
   const exportToPdf = async () => {
-    // Copy nội dung bài viết để tiền xử lý nội dung trước khi xuất pdf
+    const imageDimensionList: { width: number; height: number }[] = [];
+    // In ra tất cả chiều dài và chiều rộng của ảnh trong bài viết
+    const imgElements = document.querySelectorAll("img");
+
+    if (imgElements) {
+      for (let i = 0; i < imgElements.length; i++) {
+        const img = imgElements[i];
+        if (img.src == "" || img.width < 100) continue;
+        imageDimensionList.push({ width: img.width, height: img.height });
+      }
+    }
+
+    console.log("Exporting to PDF...");
+
     const article = document
       .getElementById("blog")
       ?.cloneNode(true) as HTMLElement;
+
     // const article = document.getElementById("blog");
 
-    // Tiền xử lý nội dung bài viết, là tách từng từ trong thẻ <p> thành từng thẻ <span>
-    // Ví dụ: <p>Hello world</p> sẽ thành <p><span>Hello</span> <span>world</span></p>
+    // Cập nhật kích thước ảnh trong PDF thành kích thước ảnh trên website để tránh lỗi khi xuất pdf
+    article!.innerHTML = replaceImageDimensions(article!, imageDimensionList);
+
+    // Thay loading="lazy" thành loading="eager" để tránh lỗi khi xuất pdf
+    article!.innerHTML = article!.innerHTML.replaceAll(
+      'loading="lazy"',
+      'loading="eager"'
+    );
+
     if (article) {
-      // Trích xuất tất cả innerText của thẻ <p> trong article mà không có id "author"
-      const pTags = Array.from(article.querySelectorAll("p")).filter(
-        (pTag) => pTag.id !== "author"
-      );
+      console.log("Creating PDF...");
+      await createPdfByPuppeteer(article.innerHTML, slug);
 
-      // Tách các thẻ <p> thành từng thẻ <span> chứa mỗi chữ trong thẻ <p>
-      pTags.forEach((pTag) => {
-        const html = pTag.innerHTML;
-        // 1. Lấy innerText của thẻ <p>
-        const text = pTag.innerText;
-
-        // 2. Tách innerText thành từng từ
-        const wordSpans = splitTextIntoWords(text);
-
-        // 3. Thay thế từng từ bằng thẻ <span> chứa từng từ
-        for (let i = 0; i < wordSpans.length; i++) {
-          const span = document.createElement("span");
-          span.innerHTML = wordSpans[i];
-
-          pTag.innerHTML = replaceWordToSpan(
-            pTag.innerHTML,
-            wordSpans[i],
-            span.outerHTML
-          );
-        }
-
-        // 4. Thay thể innerHTML cũ bằng innerHTML mới
-        article.innerHTML = article.innerHTML.replace(
-          html,
-          pTag.innerHTML.trim()
-        );
-      });
-
-      // Cấu hình xuất pdf
-      const options = {
-        margin: 16,
-        filename: `${slug}.pdf`,
-        jsPDF: {
-          format: "a4",
-          orientation: "portrait",
-          compressPDF: true,
-        },
-        // [Explain] "useCORS: true" dùng để tránh lỗi mất hình ảnh khi xuất pdf
-        html2canvas: { useCORS: true },
-        pagebreak: { avoid: ["span", "figure"] },
-      };
-
-      // Xuất pdf
-      await require("html2pdf.js")().from(article).set(options).save();
+      console.log("Saving PDF...");
+      await savePdf(slug);
     }
   };
 
@@ -126,7 +112,11 @@ const Blog = ({ blog }: { blog: Post }) => {
               {/* [Explain] Để áp dụng style cho các thẻ html trong nội dung bài viết thì cần khai báo style ở global.css, nhưng nếu làm vậy các style ở tất cả các trang khác sẽ bị ảnh hưởng. 
             Vì thế chưa có cách nào khác để áp dụng style cho nội dung bài viết*/}
               {formatedHtml && (
-                <div dangerouslySetInnerHTML={dangerouslySetPostHTML}></div>
+                // parse(formatedHtml)
+                <div
+                  className=""
+                  dangerouslySetInnerHTML={{ __html: formatedHtml }}
+                ></div>
               )}
             </article>
             {/* Export to PDF button */}
