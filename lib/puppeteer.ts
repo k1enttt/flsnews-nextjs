@@ -16,7 +16,7 @@ export async function createPdfByPuppeteer(pdfHtml: string, slug: string) {
     browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
+      executablePath: await chromium.executablePath('/var/task/.next/server/app/node_modules/@sparticuz/chromium/bin'),
       headless: chromium.headless,
     });
   }
