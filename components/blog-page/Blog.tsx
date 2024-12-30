@@ -2,9 +2,12 @@
 import { formatDate, replaceImageDimensions, savePdf } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
+import { useState } from "react";
 
 const Blog = ({ blog }: { blog: Post }) => {
   const route = useRouter();
+  const [isPdfLoading, setIsPdfLoading] = useState(false);
+  const [pdfError, setPdfError] = useState<string | null>(null);
 
   const { title, slug, primary_author, html, published_at } = blog;
 
@@ -21,6 +24,8 @@ const Blog = ({ blog }: { blog: Post }) => {
   );
 
   const exportToPdf = async () => {
+    setIsPdfLoading(true);
+    setPdfError(null);
     const imageDimensionList: { width: number; height: number }[] = [];
     const imgElements = document.querySelectorAll("img");
 
@@ -61,13 +66,16 @@ const Blog = ({ blog }: { blog: Post }) => {
 
       if (response.ok) {
         const blob = await response.blob();
-        
+
         console.log("Saving PDF...");
         savePdf(blob, slug);
       } else {
         console.error("Failed to create PDF");
+        const json = (await response.json()) as { error: string };
+        setPdfError(json.error);
       }
     }
+    setIsPdfLoading(false);
   };
 
   return (
@@ -120,12 +128,14 @@ const Blog = ({ blog }: { blog: Post }) => {
             <section>
               <div className="mt-8">
                 <button
+                  disabled={isPdfLoading}
                   type="button"
-                  className="flex items-center p-2 text-white bg-green hover:underline"
+                  className={`flex items-center p-2 text-white bg-green hover:underline` + (isPdfLoading ? "cursor-none hover:no-underline opacity-80" : "")}
                   onClick={() => exportToPdf()}
                 >
-                  Export to PDF
+                  {!isPdfLoading ? "Export to PDF" : "Loading..."}
                 </button>
+                {pdfError && <p className="text-red-500 mt-4">{pdfError}</p>}
               </div>
             </section>
           </div>
