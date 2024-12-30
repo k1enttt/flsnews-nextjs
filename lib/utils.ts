@@ -296,3 +296,20 @@ export function delay(time: number) {
       setTimeout(resolve, time)
   });
 }
+
+/**
+ * Lấy file pdf từ server và lưu về máy của người dùng
+ * @param slug slug của bài viết
+ */
+export function savePdf(blob: Blob, slug: string) {
+  // Create a temporary anchor element to trigger the download
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+
+  // Setting filename received in response
+  link.setAttribute("download", `${slug}.pdf`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}

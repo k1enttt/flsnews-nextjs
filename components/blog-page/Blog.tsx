@@ -1,12 +1,7 @@
 "use client";
-import {
-  formatDate,
-  replaceImageDimensions,
-} from "@/lib/utils";
+import { formatDate, replaceImageDimensions, savePdf } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
-import { createPdfByPuppeteer } from "@/lib/puppeteer";
-import { savePdf } from "@/lib/pdf";
 
 const Blog = ({ blog }: { blog: Post }) => {
   const route = useRouter();
@@ -43,7 +38,7 @@ const Blog = ({ blog }: { blog: Post }) => {
     const article = document
       .getElementById("blog")
       ?.cloneNode(true) as HTMLElement;
-    
+
     // Cập nhật kích thước ảnh trong PDF thành kích thước ảnh trên website để tránh lỗi khi xuất pdf
     article!.innerHTML = replaceImageDimensions(article!, imageDimensionList);
 
@@ -55,10 +50,22 @@ const Blog = ({ blog }: { blog: Post }) => {
 
     if (article) {
       console.log("Creating PDF...");
-      await createPdfByPuppeteer(article.innerHTML, slug);
+      const response = await fetch(`/api/${slug}/pdf`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ html: article.outerHTML }),
+      });
 
-      console.log("Saving PDF...");
-      await savePdf(slug);
+      if (response.ok) {
+        const blob = await response.blob();
+        
+        console.log("Saving PDF...");
+        savePdf(blob, slug);
+      } else {
+        console.error("Failed to create PDF");
+      }
     }
   };
 

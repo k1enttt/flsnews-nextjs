@@ -1,34 +1,35 @@
+import { getBrowser } from "@/lib/puppeteer";
 import { NextResponse } from "next/server";
-import fs from "fs";
 
-export async function POST(request: Request, { params }: { params: { slug: string } }) {
-  const { slug } = params;
-
-  const filename = `${slug}.pdf`;
-  const filePath = `./public/pdf/${slug}.pdf`;
-
-  if (!fs.existsSync(filePath)) {
-    return NextResponse.json({ message: "File not found" }, { status: 404 });
-  }
-
-  // Determine the content type based on the file extension
-  const contentType = "application/pdf";
-
+export async function POST(
+  request: Request,
+  { params }: { params: { slug: string } }
+) {
   try {
-    // Set headers to force download
-    const headers = new Headers();
-    headers.set("Content-Type", contentType);
-    headers.set("Content-Disposition", `attachment; filename="${filename}"`);
+    const { html } = await request.json();
+    const { slug } = params;
 
-    const stat = fs.statSync(filePath);
-    headers.set("Content-Length", stat.size.toString());
+    const browser = await getBrowser();
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: "networkidle0" });
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
+      margin: { top: "1.5cm", right: "1.5cm", bottom: "1.5cm", left: "1.5cm" },
+    });
+    await browser.close();
 
-    // Stream the file
-    const stream = fs.createReadStream(filePath);
-    return new NextResponse(stream as unknown as ReadableStream, {
-      headers,
+    return new NextResponse(pdfBuffer, {
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="${slug}.pdf"`,
+      },
     });
   } catch (error) {
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    console.error("Error generating PDF:", error);
+    return new Response(JSON.stringify({ error: "Failed to generate PDF" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }
