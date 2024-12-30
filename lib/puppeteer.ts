@@ -3,22 +3,25 @@
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer";
 import { writeFile } from "fs";
+import path from "path";
 
 export async function createPdfByPuppeteer(pdfHtml: string, slug: string) {
   let browser = null;
 
+  console.log("NODE_ENV", process.env.NODE_ENV);
   if (process.env.NODE_ENV !== "production") {
     browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
   } else {
-    browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath('/var/task/.next/server/app/node_modules/@sparticuz/chromium/bin'),
-      headless: chromium.headless,
-    });
+  browser = await puppeteer.launch({
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    // executablePath: await chromium.executablePath('/var/task/.next/server/app/node_modules/@sparticuz/chromium/bin'),
+    executablePath: await chromium.executablePath(path.join(__dirname, "..\\..\\node_modules\\@sparticuz\\chromium\\bin")),
+    headless: chromium.headless,
+  });
   }
 
   const page = await browser.newPage();
