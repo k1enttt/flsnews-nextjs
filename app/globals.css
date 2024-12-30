@@ -5,3 +5,8 @@
 .footer-link {
   @apply hover:underline hover:text-blue;
 }
+
+/* Gallery */
+.kg-gallery-image {
+  @apply mt-4;
+}
