@@ -6,7 +6,6 @@ import chromium from "@sparticuz/chromium-min";
 export async function getBrowser() {
   let browser = null;
 
-  console.log("NODE_ENV", process.env.NODE_ENV);
   if (process.env.NODE_ENV !== "production") {
     browser = await puppeteer.launch({
       headless: true,

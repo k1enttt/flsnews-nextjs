@@ -22,12 +22,13 @@ const Blog = ({ blog }: { blog: Post }) => {
 
   const exportToPdf = async () => {
     const imageDimensionList: { width: number; height: number }[] = [];
-    // In ra tất cả chiều dài và chiều rộng của ảnh trong bài viết
     const imgElements = document.querySelectorAll("img");
 
+    // Lấy kích thước ảnh trong nội dung bài viết được hiển thị trên trình duyệt
     if (imgElements) {
       for (let i = 0; i < imgElements.length; i++) {
         const img = imgElements[i];
+        // Bỏ qua ảnh không có src hoặc chiều rộng nhỏ hơn 100, đó là logo của website hay cảc ảnh nhỏ không thuộc nội dung bài viết
         if (img.src == "" || img.width < 100) continue;
         imageDimensionList.push({ width: img.width, height: img.height });
       }
@@ -39,7 +40,7 @@ const Blog = ({ blog }: { blog: Post }) => {
       .getElementById("blog")
       ?.cloneNode(true) as HTMLElement;
 
-    // Cập nhật kích thước ảnh trong PDF thành kích thước ảnh trên website để tránh lỗi khi xuất pdf
+    // Cập nhật kích thước ảnh trong PDF thành kích thước ảnh trên trình duyệt để tránh lỗi ảnh quá to khi xuất pdf
     article!.innerHTML = replaceImageDimensions(article!, imageDimensionList);
 
     // Thay loading="lazy" thành loading="eager" để tránh lỗi khi xuất pdf
