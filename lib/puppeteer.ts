@@ -1,9 +1,8 @@
 "use server";
 
-import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer";
+import chromium from "@sparticuz/chromium-min";
 import { writeFile } from "fs";
-import path from "path";
 
 export async function createPdfByPuppeteer(pdfHtml: string, slug: string) {
   let browser = null;
@@ -19,7 +18,7 @@ export async function createPdfByPuppeteer(pdfHtml: string, slug: string) {
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
     // executablePath: await chromium.executablePath('/var/task/.next/server/app/node_modules/@sparticuz/chromium/bin'),
-    executablePath: await chromium.executablePath(path.join(__dirname, "../../node_modules/@sparticuz/chromium/bin")),
+    executablePath: await chromium.executablePath("https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar"),
     headless: chromium.headless,
   });
   }
