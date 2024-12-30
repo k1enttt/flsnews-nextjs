@@ -19,7 +19,7 @@ export async function createPdfByPuppeteer(pdfHtml: string, slug: string) {
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
     // executablePath: await chromium.executablePath('/var/task/.next/server/app/node_modules/@sparticuz/chromium/bin'),
-    executablePath: await chromium.executablePath(path.join(__dirname, "..\\..\\node_modules\\@sparticuz\\chromium\\bin")),
+    executablePath: await chromium.executablePath(path.join(__dirname, "../../node_modules/@sparticuz/chromium/bin")),
     headless: chromium.headless,
   });
   }
