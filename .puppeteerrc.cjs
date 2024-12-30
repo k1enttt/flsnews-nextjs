@@ -9,5 +9,5 @@ module.exports = {
     skipDownload: false,
   },
   // Changes the cache location for Puppeteer.
-  cacheDirectory: join(__dirname, ".next", "puppeteer"),
+  cacheDirectory: join(__dirname, ".next", "cache", "puppeteer"),
 };
