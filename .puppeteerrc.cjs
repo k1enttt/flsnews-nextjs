@@ -1,5 +1,4 @@
-
-const {join} = require('path');
+const { join } = require("path");
 /**
  * @type {import("puppeteer").Configuration}
  */
@@ -9,5 +8,5 @@ module.exports = {
     skipDownload: false,
   },
   // Changes the cache location for Puppeteer.
-//   cacheDirectory: join(__dirname, ".next", "cache", "puppeteer"),
+  cacheDirectory: join(__dirname, "node_modules", ".puppeteer_cache"),
 };

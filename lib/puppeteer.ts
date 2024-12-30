@@ -1,6 +1,6 @@
 "use server";
 
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 import { writeFile } from "fs";
 
 export async function createPdfByPuppeteer(pdfHtml: string, slug: string) {
