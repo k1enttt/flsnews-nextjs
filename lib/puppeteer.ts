@@ -1,18 +1,30 @@
 "use server";
 
-import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer";
 import { writeFile } from "fs";
 
 export async function createPdfByPuppeteer(pdfHtml: string, slug: string) {
-  const browser = await puppeteer.launch({
-    executablePath: "/usr/bin/chromium-browser",
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
+  let browser = null;
+
+  if (process.env.NODE_ENV !== "production") {
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+  } else {
+    browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
+    });
+  }
+
   const page = await browser.newPage();
-  
+
   await page.setContent(pdfHtml, { waitUntil: "networkidle2" });
-  
+
   const buffer = await page.pdf({
     format: "A4",
     margin: { top: "1.5cm", right: "1.5cm", bottom: "1.5cm", left: "1.5cm" },

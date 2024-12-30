@@ -1,6 +1,4 @@
-import { getAllTags } from "./tag";
-import type { MinimalTag } from "./types";
-
+'use client';
 interface FormattedDate {
   value: string;
   title: string;
@@ -26,38 +24,8 @@ export function formatDate(
 }
 
 /**
- * Trả về tất cả các tag có trong Ghost dưới dạng cây
- * @returns {Promise<Array<Record<string, MinimalTag[]>>}
- */
-export async function getTagTree(): Promise<
-  Array<Record<string, MinimalTag[]>>
-> {
-  const tags = await getAllTags();
-
-  const formatedTags: Array<Record<string, MinimalTag[]>> = [];
-
-  for (const tag of tags) {
-    const tagProp = tag.name.split(": ");
-    const parent = tagProp[0];
-    const child = tagProp[1];
-
-    const parentTagIndex: number = formatedTags.findIndex(
-      (item) => Object.keys(item)[0] === parent
-    );
-
-    const childTagObject = { slug: tag.slug, name: child };
-    if (parentTagIndex != -1) {
-      Object.values(formatedTags[parentTagIndex])[0].push(childTagObject);
-    } else {
-      formatedTags.push({ [parent]: [childTagObject] });
-    }
-  }
-  return formatedTags;
-}
-
-/**
  * Trả về giá trị ngày tháng năm của một bài viết dưới dạng "Dec. 20, 2024"
- * @returns {Promise<MinimalTag[]>}
+ * @returns {string}
  */
 function formatDateValue(datetimeString: string): string {
   // Parse the datetime string into a Date object
@@ -235,7 +203,7 @@ export function replaceWordToSpan(
  * @returns innerHTML của HTMLElement sau khi thêm class
  */
 export function addClass(
-  html: HTMLElement | string | null,
+  html: HTMLElement | null,
   targetElement: string,
   newClass: string[]
 ): string {
@@ -243,19 +211,14 @@ export function addClass(
     return "";
   }
 
-  let htmlElement: HTMLElement = html as HTMLElement;
-  if (typeof html === "string") {
-    htmlElement = new DOMParser().parseFromString(html, "text/html").body;
-  }
-
-  htmlElement.querySelectorAll(targetElement).forEach((e) => {
+  html.querySelectorAll(targetElement).forEach((e) => {
     const outerHTML = e.outerHTML;
 
     // Thêm class border-black vào tất cả ảnh
     e.classList.add(...newClass);
-    htmlElement.innerHTML = htmlElement.innerHTML.replace(outerHTML, e.outerHTML);
+    html.innerHTML = html.innerHTML.replace(outerHTML, e.outerHTML);
   });
-  return htmlElement.innerHTML;
+  return html.innerHTML;
 }
 
 /**
@@ -293,63 +256,6 @@ export function replaceImageDimensions(
     index++;
   });
   return html.innerHTML;
-}
-
-/**
- * Lấy file pdf từ server và lưu về máy của người dùng
- * @param slug slug của bài viết
- */
-export async function savePdf(slug: string) {
-  const reponse = await fetch(`/api/${slug}/pdf`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  // Create a temporary anchor element to trigger the download
-  const url = window.URL.createObjectURL(new Blob([await reponse.blob()]));
-  const link = document.createElement("a");
-  link.href = url;
-
-  // Setting filename received in response
-  link.setAttribute("download", `${slug}.pdf`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-import parser from "html-react-parser";
-
-/**
- * Trả về chuỗi HTML sau khi thay đổi thuộc tính loading của thẻ img
- * @param htmlString Chuỗi HTML cần thay đổi thuộc tính loading của thẻ img
- * @returns Chuỗi HTML sau khi thay đổi thuộc tính loading của thẻ img
- */
-export function replaceLazyLoading(htmlString: string) {
-  // Sử dụng hàm parse để chuyển đổi HTML string thành các node React
-  const parsedHTML = parser(htmlString, {
-    replace: (node) => {
-      if (
-        node.type === "tag" &&
-        node.name === "img" &&
-        node.attribs &&
-        node.attribs.loading === "lazy"
-      ) {
-        return {
-          ...node,
-          props: {
-            ...node.attribs,
-            loading: "eager",
-          },
-        };
-      }
-      return node;
-    },
-  });
-
-  // Chuyển đổi lại thành HTML string
-  return parsedHTML;
 }
 
 /**

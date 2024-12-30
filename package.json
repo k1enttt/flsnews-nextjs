@@ -5,9 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npx puppeteer browsers install chrome && next start",
-    "lint": "next lint",
-    "postinstall": "npx puppeteer browsers install"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@ts-ghost/admin-api": "^4.2.1",
@@ -20,9 +19,9 @@
     "eslint-config-next": "^14.2.20",
     "flowbite": "^1.8.1",
     "flowbite-react": "^0.4.11",
-    "html-react-parser": "^5.2.2",
     "html2pdf.js": "^0.10.2",
     "next": "^14.2.20",
+    "puppeteer": "^23.11.1",
     "puppeteer-core": "^23.11.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -30,6 +29,7 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@sparticuz/chromium": "^131.0.1",
     "@types/dotenv": "^6.1.1",
     "@types/puppeteer": "^5.4.7",
     "autoprefixer": "^10.4.20",

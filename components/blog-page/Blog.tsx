@@ -1,13 +1,12 @@
 "use client";
 import {
-  addClass,
   formatDate,
   replaceImageDimensions,
-  savePdf,
 } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
 import { createPdfByPuppeteer } from "@/lib/puppeteer";
+import { savePdf } from "@/lib/pdf";
 
 const Blog = ({ blog }: { blog: Post }) => {
   const route = useRouter();
@@ -21,16 +20,9 @@ const Blog = ({ blog }: { blog: Post }) => {
   } = formatDate(published_at) || {};
 
   // [Explain] Thay đổi link ảnh có trong nội dung post từ localhost sang domain của mình vì thực tế ghostcms đang được host trên local và public bằng cloudflare tunnel
-  const replaceLocalhostHtml = html.replaceAll(
+  const formatedHtml = `<div class='space-y-4 w-full'>${html}</div>`.replaceAll(
     "http://localhost:8080",
     "https://ghost.kienttt.site"
-  );
-
-  // Thêm class "flex flex-col items-center" vào thẻ <figure> để căn giữa ảnh trong bài viết
-  const formatedHtml = addClass(
-    `<div class='space-y-4 w-full'>${replaceLocalhostHtml}</div>`,
-    "figure",
-    ["w-full", "flex", "flex-col", "items-center", "justify-center"]
   );
 
   const exportToPdf = async () => {
@@ -51,9 +43,7 @@ const Blog = ({ blog }: { blog: Post }) => {
     const article = document
       .getElementById("blog")
       ?.cloneNode(true) as HTMLElement;
-
-    // const article = document.getElementById("blog");
-
+    
     // Cập nhật kích thước ảnh trong PDF thành kích thước ảnh trên website để tránh lỗi khi xuất pdf
     article!.innerHTML = replaceImageDimensions(article!, imageDimensionList);
 
@@ -112,7 +102,6 @@ const Blog = ({ blog }: { blog: Post }) => {
               {/* [Explain] Để áp dụng style cho các thẻ html trong nội dung bài viết thì cần khai báo style ở global.css, nhưng nếu làm vậy các style ở tất cả các trang khác sẽ bị ảnh hưởng. 
             Vì thế chưa có cách nào khác để áp dụng style cho nội dung bài viết*/}
               {formatedHtml && (
-                // parse(formatedHtml)
                 <div
                   className=""
                   dangerouslySetInnerHTML={{ __html: formatedHtml }}
