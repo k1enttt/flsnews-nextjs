@@ -10,7 +10,6 @@ const Blog = ({ blog }: { blog: Post }) => {
   const route = useRouter();
   const [isPdfLoading, setIsPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
-  let imageDimensionList: {width: number, height: number}[] = [];
 
   const { title, slug, primary_author, html, published_at } = blog;
 
@@ -29,9 +28,7 @@ const Blog = ({ blog }: { blog: Post }) => {
   const handleExportToPdf = async () => {
     setIsPdfLoading(true);
 
-    imageDimensionList = getImageDimensions(document.getElementById("blog"));
-
-    const error = await exportToPdf(document, slug, imageDimensionList);
+    const error = await exportToPdf(document, slug);
 
     setIsPdfLoading(false);
     setPdfError(error);
