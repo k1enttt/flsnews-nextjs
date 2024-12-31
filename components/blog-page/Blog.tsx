@@ -3,6 +3,7 @@ import { formatDate, replaceImageDimensions, savePdf } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
 import { useState } from "react";
+import LoadingText from "../LoadingText";
 
 const Blog = ({ blog }: { blog: Post }) => {
   const route = useRouter();
@@ -130,10 +131,10 @@ const Blog = ({ blog }: { blog: Post }) => {
                 <button
                   disabled={isPdfLoading}
                   type="button"
-                  className={`flex items-center p-2 text-white bg-green hover:underline` + (isPdfLoading ? "cursor-none hover:no-underline opacity-80" : "")}
+                  className={`flex items-center justify-center p-2 text-white bg-green hover:underline w-36 ` + (isPdfLoading ? "pointer-events-none hover:no-underline opacity-80" : "")}
                   onClick={() => exportToPdf()}
                 >
-                  {!isPdfLoading ? "Export to PDF" : "Loading..."}
+                  {!isPdfLoading ? "Export to PDF" : <LoadingText />}
                 </button>
                 {pdfError && <p className="text-red-500 mt-4">{pdfError}</p>}
               </div>
