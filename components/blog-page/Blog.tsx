@@ -1,15 +1,16 @@
 "use client";
-import { formatDate, replaceImageDimensions, savePdf } from "@/lib/utils";
+import { exportToPdf, formatDate, getImageDimensions } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingText from "../LoadingText";
 
 const Blog = ({ blog }: { blog: Post }) => {
   const route = useRouter();
   const [isPdfLoading, setIsPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
+  let imageDimensionList: {width: number, height: number}[] = [];
 
   const { title, slug, primary_author, html, published_at } = blog;
 
@@ -25,60 +26,62 @@ const Blog = ({ blog }: { blog: Post }) => {
     "https://ghost.kienttt.site"
   );
 
-  const exportToPdf = async () => {
+  const handleExportToPdf = async () => {
     setIsPdfLoading(true);
-    setPdfError(null);
-    const imageDimensionList: { width: number; height: number }[] = [];
-    const imgElements = document.querySelectorAll("img");
 
-    // Lấy kích thước ảnh trong nội dung bài viết được hiển thị trên trình duyệt
-    if (imgElements) {
-      for (let i = 0; i < imgElements.length; i++) {
-        const img = imgElements[i];
-        // Bỏ qua ảnh không có src hoặc chiều rộng nhỏ hơn 100, đó là logo của website hay cảc ảnh nhỏ không thuộc nội dung bài viết
-        if (img.src == "" || img.width < 100) continue;
-        imageDimensionList.push({ width: img.width, height: img.height });
-      }
+    imageDimensionList = getImageDimensions(document.getElementById("blog"));
+
+    const error = await exportToPdf(document, slug, imageDimensionList);
+
+    setIsPdfLoading(false);
+    setPdfError(error);
+  };
+
+  /**
+   * Thêm style aspect-ratio cho .kg-gallery-row để giữ nguyên tỉ lệ hình ảnh trong gallery
+   * @param document Document của trang
+   * @returns
+   */
+  function updateGalleryRowAspectRatio(document: Document) {
+    // Lấy tất cả các thẻ .kg-gallery-row
+    const galleryRows: NodeListOf<HTMLElement> =
+      document.querySelectorAll(".kg-gallery-row");
+    if (!galleryRows) return;
+
+    // Hàm để tính toán chiều cao nhỏ nhất của các hình ảnh
+    function calculateMinHeight(images: NodeListOf<HTMLImageElement>) {
+      let minHeight = Number.MAX_SAFE_INTEGER;
+      images.forEach((image) => {
+        minHeight = Math.min(minHeight, image.naturalHeight);
+      });
+      return minHeight;
     }
 
-    console.log("Exporting to PDF...");
+    // Thiết lập chiều cao cho từng .kg-gallery-row
+    galleryRows.forEach((row) => {
+      const images = row.querySelectorAll("img");
+      if (!images) return;
 
-    const article = document
-      .getElementById("blog")
-      ?.cloneNode(true) as HTMLElement;
+      // Tính chiều cao nhỏ nhất của các hình ảnh trong .kg-gallery-row
+      const minHeight = calculateMinHeight(images);
 
-    // Cập nhật kích thước ảnh trong PDF thành kích thước ảnh trên trình duyệt để tránh lỗi ảnh quá to khi xuất pdf
-    article!.innerHTML = replaceImageDimensions(article!, imageDimensionList);
-
-    // Thay loading="lazy" thành loading="eager" để tránh lỗi khi xuất pdf
-    article!.innerHTML = article!.innerHTML.replaceAll(
-      'loading="lazy"',
-      'loading="eager"'
-    );
-
-    if (article) {
-      console.log("Creating PDF...");
-      const response = await fetch(`/api/${slug}/pdf`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ html: article.outerHTML }),
+      // Tính tổng chiều dài của các hình ảnh trong .kg-gallery-row khi nhân chiều cao nhỏ nhất với tỷ lệ của ảnh
+      let totalWidth = 0;
+      images.forEach((image) => {
+        // Tính tỷ lệ của ảnh
+        const imgAspectRatio: number = image.naturalWidth / image.naturalHeight;
+        totalWidth += minHeight * imgAspectRatio;
       });
 
-      if (response.ok) {
-        const blob = await response.blob();
-
-        console.log("Saving PDF...");
-        savePdf(blob, slug);
-      } else {
-        console.error("Failed to create PDF");
-        const json = (await response.json()) as { error: string };
-        setPdfError(json.error);
-      }
-    }
-    setIsPdfLoading(false);
-  };
+      // Thiết lập aspect-ratio cho .kg-gallery-row
+      row.style.aspectRatio = `${totalWidth / minHeight}`;
+    });
+  }
+  
+  useEffect(() => {
+    updateGalleryRowAspectRatio(document);
+  }, [isPdfLoading]);
+  
 
   return (
     <>
@@ -132,8 +135,13 @@ const Blog = ({ blog }: { blog: Post }) => {
                 <button
                   disabled={isPdfLoading}
                   type="button"
-                  className={`flex items-center justify-center p-2 text-white bg-green hover:underline w-36 ` + (isPdfLoading ? "pointer-events-none hover:no-underline opacity-80" : "")}
-                  onClick={() => exportToPdf()}
+                  className={
+                    `flex items-center justify-center p-2 text-white bg-green hover:underline w-36 ` +
+                    (isPdfLoading
+                      ? "pointer-events-none hover:no-underline opacity-80"
+                      : "")
+                  }
+                  onClick={() => handleExportToPdf()}
                 >
                   {!isPdfLoading ? "Export to PDF" : <LoadingText />}
                 </button>

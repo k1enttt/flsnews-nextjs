@@ -1,4 +1,4 @@
-'use client';
+"use client";
 interface FormattedDate {
   value: string;
   title: string;
@@ -246,12 +246,11 @@ export function replaceImageDimensions(
     if (dimensionList[index]) {
       e.setAttribute("width", dimensionList[index].width.toString());
       e.setAttribute("height", dimensionList[index].height.toString());
-    } 
-    else {
+    } else {
       e.setAttribute("width", "672");
       e.setAttribute("height", "400");
     }
-    
+
     html.innerHTML = html.innerHTML.replace(outerHTML, e.outerHTML);
     index++;
   });
@@ -292,8 +291,8 @@ export function removeFigureAndFigcaption(element: HTMLElement) {
  * @returns Hàm setTimeout chạy với thời gian đã nhập
  */
 export function delay(time: number) {
-  return new Promise(function(resolve) { 
-      setTimeout(resolve, time)
+  return new Promise(function (resolve) {
+    setTimeout(resolve, time);
   });
 }
 
@@ -312,4 +311,103 @@ export function savePdf(blob: Blob, slug: string) {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+/**
+ * Xử lý việc xuất bài viết ra file PDF
+ * @param document Document của trang web
+ * @param slug Slug của bài viết
+ * @returns Lỗi nếu có, null nếu không có lỗi
+ */
+export async function exportToPdf(
+  document: Document,
+  slug: string,
+  imageDimensionList: { width: number; height: number }[]
+): Promise<string | null> {
+  let errorString: string | null = null;
+
+  console.log("Exporting to PDF...");
+
+  const article = document
+    .getElementById("blog")
+    ?.cloneNode(true) as HTMLElement;
+
+  // Cập nhật kích thước ảnh trong PDF thành kích thước ảnh trên trình duyệt để tránh lỗi ảnh quá to khi xuất pdf
+  article!.innerHTML = replaceImageDimensions(article!, imageDimensionList);
+
+  // Thay loading="lazy" thành loading="eager" để tránh lỗi khi xuất pdf
+  article!.innerHTML = article!.innerHTML.replaceAll(
+    'loading="lazy"',
+    'loading="eager"'
+  );
+
+  if (article) {
+    console.log("Creating PDF...");
+    const response = await fetch(`/api/${slug}/pdf`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ html: article.outerHTML }),
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+
+      console.log("Saving PDF...");
+      savePdf(blob, slug);
+    } else {
+      console.error("Failed to create PDF");
+      const json = (await response.json()) as { error: string };
+      errorString = json.error;
+    }
+  }
+  return errorString;
+}
+
+/**
+ * 
+ * @param HTMLElement Có thê là Document của trang web hoặc một phần tử HTML
+ * @param isMobile Có phải là đang sử dụng thiết bị di động không
+ * @returns 
+ */
+export function getImageDimensions(
+  htmlElement: HTMLElement | null,
+  // isMobile?: boolean
+): { width: number; height: number }[] {
+  if (!htmlElement) {
+    return [];
+  }
+  const imageDimensionList: { width: number; height: number }[] = [];
+  // if (!isMobile) {
+  //   const imgElements = document.querySelectorAll("img");
+
+  //   // Lấy kích thước ảnh trong nội dung bài viết được hiển thị trên trình duyệt
+  //   if (imgElements) {
+  //     for (let i = 0; i < imgElements.length; i++) {
+  //       const img = imgElements[i];
+  //       // Bỏ qua ảnh không có src hoặc chiều rộng nhỏ hơn 100, đó là logo của website hay cảc ảnh nhỏ không thuộc nội dung bài viết
+  //       if (img.src == "" || img.width < 100) continue;
+  //       imageDimensionList.push({ width: img.width, height: img.height });
+  //     }
+  //   }
+  // } else {
+    // Lấy độ rộng và chiều cao của ảnh trên mobile
+    const imgElements = htmlElement.querySelectorAll("img");
+    
+    // Tính chiều dài mới của ảnh bằng cách lấy tỷ lệ ảnh chia với 600px (là độ rộng mong muốn của ảnh trên pdf)
+    if (imgElements) {
+      for (let i = 0; i < imgElements.length; i++) {
+        const img = imgElements[i];
+        // Bỏ qua ảnh không có src hoặc chiều rộng nhỏ hơn 100, đó là logo của website hay cảc ảnh nhỏ không thuộc nội dung bài viết
+        if (img.src == "" || img.width < 100) continue;
+        const newWidth = 580;
+        const newHeight = (img.height * newWidth) / img.width;
+        imageDimensionList.push({ width: newWidth, height: newHeight });
+      }
+    }
+    
+    // Trả về mảng chứa kích thước ảnh mới
+  // }
+  return imageDimensionList;
 }

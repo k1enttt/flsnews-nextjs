@@ -6,7 +6,18 @@
   @apply hover:underline hover:text-blue;
 }
 
-/* Gallery */
-.kg-gallery-image {
-  @apply mt-4;
+/* [Begin] Gallery */
+.kg-gallery-container {
+  @apply space-y-2;
 }
+.kg-gallery-row {
+  gap: 0.5rem;
+  display: flex;
+  justify-content: center;
+}
+.kg-gallery-image img {
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+}
+/* [End] Gallery */
