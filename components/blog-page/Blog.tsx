@@ -154,6 +154,8 @@ const Blog = ({ blog }: { blog: Post }) => {
                   src="/fls-logo.webp"
                   className="mr-3 h-16"
                   alt="FLS Group Logo"
+                  width={145}
+                  height={64}
                 />
               </a>
             </div>
