@@ -2,6 +2,7 @@
 import { formatDate, replaceImageDimensions, savePdf } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
+import Image from "next/image";
 import { useState } from "react";
 import LoadingText from "../LoadingText";
 
@@ -149,7 +150,7 @@ const Blog = ({ blog }: { blog: Post }) => {
             {/* Logo của công ty */}
             <div className="mb-6 md:mb-0">
               <a href="https://fls-group.com" className="flex items-center">
-                <img
+                <Image
                   src="/fls-logo.webp"
                   className="mr-3 h-16"
                   alt="FLS Group Logo"
