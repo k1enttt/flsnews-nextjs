@@ -27,11 +27,17 @@ const Blog = ({ blog }: { blog: Post }) => {
 
   const handleExportToPdf = async () => {
     setIsPdfLoading(true);
+    setPdfError(null);
 
-    const error = await exportToPdf(document, slug);
-
-    setIsPdfLoading(false);
-    setPdfError(error);
+    await exportToPdf(document, slug)
+      .then((errorMes) => {
+        setPdfError(errorMes);
+      }).catch((error) => {
+        setPdfError(error.message);
+      })
+      .finally(() => {
+        setIsPdfLoading(false);
+      });
   };
 
   /**
@@ -74,11 +80,10 @@ const Blog = ({ blog }: { blog: Post }) => {
       row.style.aspectRatio = `${totalWidth / minHeight}`;
     });
   }
-  
+
   useEffect(() => {
     updateGalleryRowAspectRatio(document);
   }, [isPdfLoading]);
-  
 
   return (
     <>

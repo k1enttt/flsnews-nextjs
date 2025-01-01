@@ -328,8 +328,6 @@ export async function exportToPdf(
     document.getElementById("blog")
   );
 
-  console.log("Exporting to PDF...");
-
   const article = document
     .getElementById("blog")
     ?.cloneNode(true) as HTMLElement;
@@ -344,7 +342,6 @@ export async function exportToPdf(
   );
 
   if (article) {
-    console.log("Creating PDF...");
     const response = await fetch(`/api/${slug}/pdf`, {
       method: "POST",
       headers: {
@@ -355,12 +352,8 @@ export async function exportToPdf(
 
     if (response.ok) {
       const blob = await response.blob();
-
-      console.log("Saving PDF...");
       savePdf(blob, slug);
     } else {
-      console.error("Failed to create PDF");
-      console.log(await response.json());
       const json = (await response.json()) as { error: string };
       errorString = json.error;
     }
@@ -395,6 +388,5 @@ export function getImageDimensions(
     }
   }
 
-  console.log("Image dimensions:", imageDimensionList);
   return imageDimensionList;
 }
