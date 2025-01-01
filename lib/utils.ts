@@ -354,8 +354,14 @@ export async function exportToPdf(
       const blob = await response.blob();
       savePdf(blob, slug);
     } else {
-      const json = (await response.json()) as { error: string };
-      errorString = json.error;
+      try {
+        const json = (await response.json()) as { error: string };
+        errorString = json.error;
+      }
+      catch (error) {
+        console.error(error);
+        errorString = "Failed to generate PDF";
+      }
     }
   }
   return errorString;
