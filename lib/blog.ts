@@ -5,6 +5,7 @@ import type {
   SuccessBrowseResponse,
   SuccessReadResponse,
 } from "./types";
+import { revalidatePath } from "next/cache";
 
 /**
  * Trả về tất cả bài viết có trong Ghost
@@ -17,6 +18,8 @@ export async function getAllBlog(): Promise<Array<Post>> {
   if (!response.success || !response.data) {
     return [];
   }
+
+  revalidatePath('/');
   return response.data;
 }
 
@@ -70,6 +73,8 @@ export async function getPostPerPage({
   }
   const posts = response.data;
   const pages = response.meta.pagination.pages;
+
+  revalidatePath('/');
   return { posts, pages };
 }
 
@@ -88,5 +93,7 @@ export async function getBlogBySlug(slug: string): Promise<Post | null> {
   if (!response.success || !response.data) {
     return null;
   }
+
+  revalidatePath(`/blog/${slug}`);
   return response.data;
 }
