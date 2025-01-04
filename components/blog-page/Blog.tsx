@@ -1,9 +1,9 @@
 "use client";
-import { exportToPdf, formatDate, getImageDimensions } from "@/lib/utils";
+import { exportToPdf, formatDate } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { Post } from "@ts-ghost/content-api";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoadingText from "../LoadingText";
 
 const Blog = ({ blog }: { blog: Post }) => {
@@ -19,12 +19,6 @@ const Blog = ({ blog }: { blog: Post }) => {
     datetime,
   } = formatDate(published_at) || {};
 
-  // [Explain] Thay đổi link ảnh có trong nội dung post từ localhost sang domain của mình vì thực tế ghostcms đang được host trên local và public bằng cloudflare tunnel
-  const formatedHtml = `<div class='space-y-4 w-full'>${html}</div>`.replaceAll(
-    "http://localhost:8080",
-    "https://ghost.kienttt.site"
-  );
-
   const handleExportToPdf = async () => {
     setIsPdfLoading(true);
     setPdfError(null);
@@ -39,51 +33,6 @@ const Blog = ({ blog }: { blog: Post }) => {
         setIsPdfLoading(false);
       });
   };
-
-  /**
-   * Thêm style aspect-ratio cho .kg-gallery-row để giữ nguyên tỉ lệ hình ảnh trong gallery
-   * @param document Document của trang
-   * @returns
-   */
-  function updateGalleryRowAspectRatio(document: Document) {
-    // Lấy tất cả các thẻ .kg-gallery-row
-    const galleryRows: NodeListOf<HTMLElement> =
-      document.querySelectorAll(".kg-gallery-row");
-    if (!galleryRows) return;
-
-    // Hàm để tính toán chiều cao nhỏ nhất của các hình ảnh
-    function calculateMinHeight(images: NodeListOf<HTMLImageElement>) {
-      let minHeight = Number.MAX_SAFE_INTEGER;
-      images.forEach((image) => {
-        minHeight = Math.min(minHeight, image.naturalHeight);
-      });
-      return minHeight;
-    }
-
-    // Thiết lập chiều cao cho từng .kg-gallery-row
-    galleryRows.forEach((row) => {
-      const images = row.querySelectorAll("img");
-      if (!images) return;
-
-      // Tính chiều cao nhỏ nhất của các hình ảnh trong .kg-gallery-row
-      const minHeight = calculateMinHeight(images);
-
-      // Tính tổng chiều dài của các hình ảnh trong .kg-gallery-row khi nhân chiều cao nhỏ nhất với tỷ lệ của ảnh
-      let totalWidth = 0;
-      images.forEach((image) => {
-        // Tính tỷ lệ của ảnh
-        const imgAspectRatio: number = image.naturalWidth / image.naturalHeight;
-        totalWidth += minHeight * imgAspectRatio;
-      });
-
-      // Thiết lập aspect-ratio cho .kg-gallery-row
-      row.style.aspectRatio = `${totalWidth / minHeight}`;
-    });
-  }
-
-  useEffect(() => {
-    updateGalleryRowAspectRatio(document);
-  }, [isPdfLoading]);
 
   return (
     <>
@@ -124,10 +73,10 @@ const Blog = ({ blog }: { blog: Post }) => {
               {/* Nội dung bài blog */}
               {/* [Explain] Để áp dụng style cho các thẻ html trong nội dung bài viết thì cần khai báo style ở global.css, nhưng nếu làm vậy các style ở tất cả các trang khác sẽ bị ảnh hưởng. 
             Vì thế chưa có cách nào khác để áp dụng style cho nội dung bài viết*/}
-              {formatedHtml && (
+              {html && (
                 <div
                   className=""
-                  dangerouslySetInnerHTML={{ __html: formatedHtml }}
+                  dangerouslySetInnerHTML={{ __html: html }}
                 ></div>
               )}
             </article>

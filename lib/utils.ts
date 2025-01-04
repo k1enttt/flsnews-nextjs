@@ -1,4 +1,3 @@
-"use client";
 interface FormattedDate {
   value: string;
   title: string;
@@ -357,8 +356,7 @@ export async function exportToPdf(
       try {
         const json = (await response.json()) as { error: string };
         errorString = json.error;
-      }
-      catch (error) {
+      } catch (error) {
         console.error(error);
         errorString = "Failed to generate PDF";
       }
@@ -395,4 +393,96 @@ export function getImageDimensions(
   }
 
   return imageDimensionList;
+}
+
+/**
+ * Hàm này dùng để trả về tất cả các thẻ div kg-gallery-image có trong chuỗi html
+ * @param htmlString Chuỗi html cần tìm kiếm
+ * @param className Tên class của thẻ div cần tìm
+ * @returns Mảng các chuỗi html đầy đủ thẻ mở đến thẻ đóng
+ */
+function findHtmlDiv(
+  htmlString: string,
+  className: string = "kg-gallery-image"
+): string[] {
+  // Biểu thức chính quy để tìm kiếm tất cả các thẻ div có class là className
+  const regex = new RegExp(`<div class="${className}">.*?<\\/div>`, "g");
+  return htmlString.match(regex) || [];
+}
+
+// Hàn để trả về chiều cao và chiều rộng của một thẻ image dạng string
+function getDimension(image: string): { width: number; height: number } {
+  const width = Number(image.match(/width="(\d+)"/)![1]);
+  const height = Number(image.match(/height="(\d+)"/)![1]);
+  return { width, height };
+}
+
+// Hàm để tính toán chiều cao nhỏ nhất của các hình ảnh
+function calculateMinHeight(images: string[]) {
+  let minHeight = Number.MAX_SAFE_INTEGER;
+  images.forEach((image) => {
+    const { width: _, height: naturalHeight } = getDimension(image);
+    minHeight = Math.min(minHeight, naturalHeight);
+  });
+  return minHeight;
+}
+
+// Hàm để chèn style vào thẻ div
+function insertStyle(div: string, style: string) {
+  return div.replace(/<div/, `<div ${style}`);
+}
+
+/**
+ * Thêm style aspect-ratio cho .kg-gallery-row để giữ nguyên tỉ lệ hình ảnh trong gallery
+ * @param html html của bài viết
+ * @returns
+ */
+export function updateGalleryRowAspectRatio(html: string): string | undefined {
+  let updatedHtml = html;
+  // Lấy tất cả các thẻ .kg-gallery-row
+  const galleryImages: string[] | null = findHtmlDiv(html, "kg-gallery-image");
+  if (!galleryImages) return;
+
+  // Gom nhóm tối đa 3 ảnh trong một thẻ div với class là kg-gallery-row
+  const galleryRows: string[] = [];
+  for (let i = 1; i <= galleryImages.length; i++) {
+    if (i % 3 === 0) {
+      const row = `<div class="kg-gallery-row">${galleryImages
+        .slice(i - 3, i)
+        .join("")}</div>`;
+      galleryRows.push(row);
+    } else if (i === galleryImages.length) {
+      const row = `<div class="kg-gallery-row">${galleryImages
+        .slice(i - (i % 3), i)
+        .join("")}</div>`;
+      galleryRows.push(row);
+    }
+  }
+  if (!galleryRows) return;
+
+  // Thiết lập chiều cao cho từng .kg-gallery-row
+  galleryRows.forEach((row, index) => {
+    const images = row.match(/<img.*?>/g);
+    if (!images) return;
+
+    // Tính chiều cao nhỏ nhất của các hình ảnh trong .kg-gallery-row
+    const minHeight = calculateMinHeight(images);
+
+    // Tính tổng chiều dài của các hình ảnh trong .kg-gallery-row khi nhân chiều cao nhỏ nhất với tỷ lệ của ảnh
+    let totalWidth = 0;
+    images.forEach((image) => {
+      const { width: naturalWidth, height: naturalHeight } =
+        getDimension(image);
+      // Tính tỷ lệ của ảnh
+      const imgAspectRatio: number = naturalWidth / naturalHeight;
+      totalWidth += minHeight * imgAspectRatio;
+    });
+
+    // Thiết lập aspect-ratio cho .kg-gallery-row
+    const aspectRatio = totalWidth / minHeight;
+    const newStyle = `style="aspect-ratio: ${aspectRatio};"`;
+
+    updatedHtml = updatedHtml.replace(row, insertStyle(row, newStyle));
+  });
+  return updatedHtml;
 }
